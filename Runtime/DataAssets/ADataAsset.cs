@@ -22,10 +22,11 @@ namespace CippSharp.Core.Containers
         /// </summary>
         [FormerlySerializedAs("m_data")]
         [FormerlySerializedAs("data")]
+        [FormerlySerializedAs("m_list")]
         [FormerlySerializedAs("list")]
         [FormerlySerializedAs("array")]
         [FormerlySerializedAs("value")]
-        [SerializeField] protected T m_data = default(T);
+        [SerializeField] protected T value = default(T);
 
         #region IContainerBase and IContainer Implementation
         
@@ -212,7 +213,7 @@ namespace CippSharp.Core.Containers
         
         public static implicit operator T (ADataAsset<T> dataContainer)
         {
-            return dataContainer.m_data;
+            return dataContainer.value;
         }
         
         #endregion

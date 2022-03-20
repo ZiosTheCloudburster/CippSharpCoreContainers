@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace CippSharp.Core
+namespace CippSharp.Core.Containers
 {
     [CreateAssetMenu(menuName = nameof(CippSharp) + "/Data Assets/Sprite List Asset")]
     public class SpriteListAsset : AListDataAsset<Sprite>

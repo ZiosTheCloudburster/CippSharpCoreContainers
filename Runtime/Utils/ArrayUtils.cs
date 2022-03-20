@@ -1,11 +1,14 @@
 ﻿
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace CippSharp.Core.Containers
 {
     internal static class ArrayUtils
     {
+        #region Find
+        
         /// <summary>
         /// Find Method
         /// </summary>
@@ -30,6 +33,68 @@ namespace CippSharp.Core.Containers
             result = default;
             return false;
         }
+        
+        #endregion
+        
+        #region Is Null or Empty
+        
+        /// <summary>
+        /// Returns true if the given array is null or empty
+        /// </summary>
+        /// <param name="array"></param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public static bool IsNullOrEmpty<T>(T[] array)
+        {
+            return array == null || array.Length < 1;
+        }
+        
+        /// <summary>
+        /// Returns true if the given list is null or empty
+        /// </summary>
+        /// <param name="list"></param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public static bool IsNullOrEmpty<T>(List<T> list)
+        {
+            return list == null || list.Count < 1;
+        }
+
+        /// <summary>
+        /// Returns true if the given dictionary is null or empty
+        /// </summary>
+        /// <param name="dictionary"></param>
+        /// <typeparam name="K"></typeparam>
+        /// <typeparam name="V"></typeparam>
+        /// <returns></returns>
+        public static bool IsNullOrEmpty<K, V>(Dictionary<K, V> dictionary)
+        {
+            return dictionary == null || dictionary.Count < 1;
+        }
+
+        /// <summary>
+        /// Returns true if the given collection is null or empty
+        /// </summary>
+        /// <param name="collection"></param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public static bool IsNullOrEmpty<T>(ICollection<T> collection)
+        {
+            return collection == null || collection.Count < 1;
+        }
+        
+        /// <summary>
+        /// Returns true if the given enumerable is null or empty
+        /// </summary>
+        /// <param name="enumerable"></param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public static bool IsNullOrEmpty<T>(IEnumerable<T> enumerable)
+        {
+            return enumerable == null || !enumerable.Any();
+        }
+
+        #endregion
         
         #region Random Element
 

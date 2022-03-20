@@ -14,5 +14,10 @@ namespace CippSharp.Core.Containers
         public abstract bool Check(PredicateGenericAccessDelegate access);
 
         public abstract void Set(object newValue);
+        
+        protected virtual void OnValidate()
+        {
+            
+        }
     }
 }

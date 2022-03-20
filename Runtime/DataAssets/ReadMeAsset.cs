@@ -1,15 +1,16 @@
-﻿//
-// Author: Alessandro Salani (Cippo)
-//
-
+﻿using System;
 using UnityEngine;
 
-namespace CippSharp.Core
+namespace CippSharp.Core.Containers
 {
     [CreateAssetMenu(menuName = nameof(CippSharp)+"/Data Assets/ReadMe Asset")]
-    public class ReadMeAsset : ScriptableObject
+    public class ReadMeAsset : ADataAsset<ReadMeAsset.Data>
     {
-        [TextArea(1, 50)] 
-        public string text;
+        [Serializable]
+        public struct Data
+        {
+            [TextArea(1, 50)]
+            public string text;
+        }
     }
 }

@@ -16,6 +16,7 @@ namespace CippSharp.Core.Containers
         /// </summary>
         [FormerlySerializedAs("m_data")]
         [FormerlySerializedAs("data")]
+        [FormerlySerializedAs("m_list")]
         [FormerlySerializedAs("list")]
         [FormerlySerializedAs("array")]
         [FormerlySerializedAs("value")]
