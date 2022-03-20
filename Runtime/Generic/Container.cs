@@ -5,16 +5,20 @@ using UnityEngine.Serialization;
 namespace CippSharp.Core.Containers
 {
     /// <summary>
-    /// Consider this like an abstract class
+    /// Purpose: consider this like an abstract class for generic containers
     /// </summary>
     /// <typeparam name="T"></typeparam>
     [Serializable]
     public class Container<T> : AContainerBase, IContainer<T>
     {
+        /// <summary>
+        /// The stored data/value
+        /// </summary>
         [FormerlySerializedAs("m_data")]
         [FormerlySerializedAs("data")]
         [FormerlySerializedAs("list")]
         [FormerlySerializedAs("array")]
+        [FormerlySerializedAs("value")]
         [SerializeField] protected T value = default(T);
         public T Value => value;
         
