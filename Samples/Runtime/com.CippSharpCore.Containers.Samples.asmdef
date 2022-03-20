@@ -1,0 +1,15 @@
+{
+    "name": "com.CippSharpCore.Containers.Samples",
+    "references": [
+        "GUID:e2c767eaf4cfd23428c2cffbd7ba45bf"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": false,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
