@@ -22,4 +22,11 @@ namespace CippSharp.Core.Containers
     /// </summary>
     /// <param name="data"></param>
     public delegate bool PredicateAccessDelegate<T>(ref T data);
+
+//    /// <summary>
+//    /// To
+//    /// </summary>
+//    /// <param name="element"></param>
+//    /// <typeparam name="T"></typeparam>
+//    public delegate T MatchAccessDelegate<T>(ref T element);
 }
