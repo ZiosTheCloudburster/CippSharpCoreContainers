@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEngine;
 
 namespace CippSharp.Core.Containers
 {
@@ -203,6 +204,50 @@ namespace CippSharp.Core.Containers
         {
             source = source.Where((e, i) => i != index).ToArray();
         }
+
+        #endregion
+
+        #region SubArray
+
+        /// <summary>
+        /// Same as substring, but for arrays.
+        /// </summary>
+        /// <param name="collection"></param>
+        /// <param name="index"></param>
+        /// <param name="length"></param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public static T[] SubArrayOrDefault<T>(ICollection<T> collection, int index, int length)
+        {
+            return TrySubArray(collection.ToArray(), index, length, out T[] subArray) ? subArray : default;
+        }
+        
+        /// <summary>
+        /// Try to get a subArray from an array
+        /// </summary>
+        /// <param name="array"></param>
+        /// <param name="index"></param>
+        /// <param name="length"></param>
+        /// <param name="subArray"></param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public static bool TrySubArray<T>(T[] array, int index, int length, out T[] subArray)
+        {
+            try
+            {
+                T[] result = new T[length];
+                Array.Copy(array, index, result, 0, length);
+                subArray = result;
+                return true;
+            }
+            catch (Exception e)
+            {
+                Debug.LogError($"Failed to retrieve subArray. Exception: {e.Message}.");
+                subArray = null;
+                return false;
+            }
+        }
+
 
         #endregion
     }
