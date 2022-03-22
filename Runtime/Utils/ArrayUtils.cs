@@ -51,6 +51,12 @@ namespace CippSharp.Core.Containers
 //            return newDictionary;
 //        }
 
+        public static void SplitCollection<TKey, TValue>(ICollection<KeyValuePair<TKey, TValue>> collection, out List<TKey> keys, out List<TValue> values)
+        {
+            KeyValuePair<TKey, TValue>[] array = collection.ToArray();
+            SplitArray(array, out keys, out values);
+        }
+        
         /// <summary>
         /// From Dictionary to list of Keys and Values
         /// </summary>
@@ -59,10 +65,10 @@ namespace CippSharp.Core.Containers
         /// <param name="values"></param>
         /// <typeparam name="TKey"></typeparam>
         /// <typeparam name="TValue"></typeparam>
-        public static void FromDictionary<TKey, TValue>(Dictionary<TKey, TValue> dictionary, out List<TKey> keys, out List<TValue> values)
+        public static void SplitDictionary<TKey, TValue>(Dictionary<TKey, TValue> dictionary, out List<TKey> keys, out List<TValue> values)
         {
             KeyValuePair<TKey, TValue>[] array = dictionary.ToArray();
-            FromDictionary(array, out keys, out values);
+            SplitArray(array, out keys, out values);
         }
 
         /// <summary>
@@ -73,7 +79,7 @@ namespace CippSharp.Core.Containers
         /// <param name="values"></param>
         /// <typeparam name="TKey"></typeparam>
         /// <typeparam name="TValue"></typeparam>
-        public static void FromDictionary<TKey, TValue>(KeyValuePair<TKey, TValue>[] pairs, out List<TKey> keys, out List<TValue> values)
+        public static void SplitArray<TKey, TValue>(KeyValuePair<TKey, TValue>[] pairs, out List<TKey> keys, out List<TValue> values)
         {
             keys = new List<TKey>();
             values = new List<TValue>();

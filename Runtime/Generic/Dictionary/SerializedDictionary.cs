@@ -84,10 +84,10 @@ namespace CippSharp.Core.Containers
             list.AddRange(range);
         }
         
-        public Dictionary<Key, Value> ToDictionary()
-        {
-            return ArrayUtils.ToDictionary(list.Select(e => e.ToKeyValuePair()));
-        }
+//        public Dictionary<Key, Value> ToDictionary()
+//        {
+//            return ArrayUtils.ToDictionary(list.Select(e => e.ToKeyValuePair()));
+//        }
 
         public override void Clear()
         {
