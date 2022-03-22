@@ -2,12 +2,114 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using UnityEngine;
-
 namespace CippSharp.Core.Containers
 {
+    using Array = System.Array;
+    using Exception = System.Exception;
+    using Debug = UnityEngine.Debug;
+    
     internal static class ArrayUtils
     {
+        #region Generic
+        
+        /// <summary>
+        /// Retrieve if context object is an array.
+        /// </summary>
+        /// <param name="context"></param>
+        /// <returns></returns>
+        public static bool IsArray(object context)
+        {
+            return context.GetType().IsArray;
+        }
+        
+         /// <summary>
+        /// Try to get value
+        /// </summary>
+        /// <param name="array"></param>
+        /// <param name="index"></param>
+        /// <param name="element"></param>
+        /// <returns>success</returns>
+        public static bool TryGetValue(object[] array, int index, out object element)
+        {
+            try
+            {
+                element = array[index];
+                return true;
+            }
+            catch (Exception e)
+            {
+                Debug.LogError(e.Message);
+                element = null;
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// Try to set value
+        /// </summary>
+        /// <param name="array"></param>
+        /// <param name="index"></param>
+        /// <param name="element"></param>
+        /// <returns>success</returns>
+        public static bool TrySetValue(object[] array, int index, object element)
+        {
+            try
+            {
+                array[index] = element;
+                return true;
+            }
+            catch (Exception e)
+            {
+                Debug.LogError(e.Message);
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// Try to cast an object to object array
+        /// </summary>
+        /// <param name="value"></param>
+        /// <param name="array"></param>
+        /// <returns>success</returns>
+        public static bool TryCast(object value, out object[] array)
+        {
+            try
+            {
+                array = ((Array)value).Cast<object>().ToArray();
+                return true;
+            }
+            catch (Exception e)
+            {
+                Debug.LogError(e.Message);
+                array = null;
+                return false;
+            }
+        }
+        
+        /// <summary>
+        /// Try to cast a generic Array to object[]
+        /// </summary>
+        /// <param name="value"></param>
+        /// <param name="array"></param>
+        /// <returns>success</returns>
+        public static bool TryCast(Array value, out object[] array)
+        {
+            try
+            {
+                array = (value).Cast<object>().ToArray();
+                return true;
+            }
+            catch (Exception e)
+            {
+                Debug.LogError(e.Message);
+                array = null;
+                return false;
+            }
+        }
+        
+
+        #endregion
+        
         #region Find
         
         /// <summary>
@@ -123,7 +225,7 @@ namespace CippSharp.Core.Containers
 
         #endregion
         
-//        #region Is Valid Index
+        #region Is Valid Index
 //
 //        /// <summary>
 //        /// Returns true if the given index is the array range.
@@ -149,6 +251,18 @@ namespace CippSharp.Core.Containers
 //            return index >= 0 && index < list.Count;
 //        }
 //
+        /// <summary>
+        /// Returns true if the given index is in the list range.
+        /// </summary>
+        /// <param name="index"></param>
+        /// <param name="collection"></param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public static bool IsValidIndex<T>(int index, ICollection<T> collection)
+        {
+            return index >= 0 && index < collection.Count;
+        }
+        
 //        /// <summary>
 //        /// Returns true if the given index is in the list range.
 //        /// </summary>
@@ -160,8 +274,8 @@ namespace CippSharp.Core.Containers
 //        {
 //            return index >= 0 && index < enumerable.Count();
 //        }
-//        
-//        #endregion
+        
+        #endregion
         
 //        #region Random Element
 //
@@ -189,7 +303,7 @@ namespace CippSharp.Core.Containers
 //            return list[index];
 //        }
 //
-//        #endregion
+//        #endcregion
 
         #region Remove
 
