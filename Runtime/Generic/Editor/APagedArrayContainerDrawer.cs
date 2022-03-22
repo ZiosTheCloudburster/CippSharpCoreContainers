@@ -1,5 +1,4 @@
 ﻿#if UNITY_EDITOR
-using CippSharp.Core;
 using CippSharp.Core.Containers;
 using UnityEditor;
 using UnityEngine;
@@ -7,7 +6,7 @@ using UnityEngine;
 namespace CippSharpEditor.Core.Containers
 {
     [CustomPropertyDrawer(typeof(APagedArrayContainerBase), true)]
-    public class PagedArrayContainerDrawer : PropertyDrawer
+    public class APagedArrayContainerDrawer : PropertyDrawer
     {
         //references
         protected const string arrayPropertyName = "array";
