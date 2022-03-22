@@ -22,6 +22,23 @@ namespace CippSharp.Core.Containers
     /// </summary>
     /// <param name="data"></param>
     public delegate bool PredicateAccessDelegate<T>(ref T data);
+   
+    /// <summary>
+    /// To access stored data pairs
+    /// </summary>
+    /// <param name="data1"></param>
+    /// <param name="data2"></param>
+    /// <typeparam name="T1"></typeparam>
+    /// <typeparam name="T2"></typeparam>
+    public delegate void AccessDelegate<T1, T2>(ref T1 data1, ref T2 data2);
+    /// <summary>
+    /// To access stored data for a check
+    /// </summary>
+    /// <param name="data1"></param>
+    /// <param name="data2"></param>
+    /// <typeparam name="T1"></typeparam>
+    /// <typeparam name="T2"></typeparam>
+    public delegate bool PredicateAccessDelegate<T1, T2>(ref T1 data1, ref T2 data2);
 
 //    /// <summary>
 //    /// To

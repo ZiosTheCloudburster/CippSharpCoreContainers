@@ -1,31 +1,32 @@
-﻿using System;
-
-namespace CippSharp.Core.Containers
+﻿namespace CippSharp.Core.Containers
 {
-    public interface IContainer<T1, T2> : IContainerBase
+    public interface IContainerPair<in T1, in T2> : IContainerBase
     {
         /// <summary>
-        /// Retrieve the contained element
+        /// Retrieve one of the contained elements
         /// </summary>
         /// <returns></returns>
-        Tuple<T1, T2> GetValue();
-        
+        T GetValue<T>(PairElement target) where T : T1, T2;
+
         /// <summary>
         /// Read/Write on data/value
         /// </summary>
+        /// <param name="target"></param>
         /// <param name="access"></param>
-        void Access(AccessDelegate<Tuple<T1, T2>> access);
-        
+        void Access<T>(PairElement target, AccessDelegate<T> access) where T : T1, T2;
+
         /// <summary>
         /// Predicate on data/value
         /// </summary>
+        /// <param name="target"></param>
         /// <param name="access"></param>
-        bool Check(PredicateAccessDelegate<Tuple<T1, T2>> access);
+        bool Check<T>(PairElement target, PredicateAccessDelegate<T> access) where T : T1, T2;
 
         /// <summary>
         /// Set the contained element
         /// </summary>
+        /// <param name="target"></param>
         /// <param name="newValue"></param>
-        void Set(Tuple<T1, T2> newValue);
+        void Set<T>(PairElement target, T newValue) where T : T1, T2;
     }
 }

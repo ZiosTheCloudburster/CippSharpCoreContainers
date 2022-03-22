@@ -8,9 +8,9 @@ namespace CippSharp.Core.Containers
         /// <param name="target"></param>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        public static T To<T>(this object target)
+        public static T ToOrDefault<T>(this object target)
         {
-            return CastUtils.To<T>(target);
+            return CastUtils.ToOrDefault<T>(target);
         }
 
         /// <summary>
@@ -19,7 +19,7 @@ namespace CippSharp.Core.Containers
         /// <param name="target"></param>
         /// <param name="result"></param>
         /// <typeparam name="T"></typeparam>
-        /// <returns></returns>
+        /// <returns>success</returns>
         public static bool To<T>(this object target, out T result)
         {
             return CastUtils.To<T>(target, out result);

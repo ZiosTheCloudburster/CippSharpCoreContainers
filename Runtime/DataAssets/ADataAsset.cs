@@ -204,7 +204,7 @@ namespace CippSharp.Core.Containers
         /// <returns></returns>
         public virtual K ToOrDefault<K>()
         {
-            return CastUtils.To<K>(value);
+            return CastUtils.ToOrDefault<K>(value);
         }
         
         #endregion

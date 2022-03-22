@@ -61,7 +61,7 @@ namespace CippSharp.Core.Containers
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        public static T To<T>(object target)
+        public static T ToOrDefault<T>(object target)
         {
             try
             {
@@ -77,7 +77,7 @@ namespace CippSharp.Core.Containers
         /// Casts an object to type T. In case of failure returns T default value. 
         /// </summary>
         /// <typeparam name="T"></typeparam>
-        /// <returns></returns>
+        /// <returns>success</returns>
         public static bool To<T>(object target, out T result)
         {
             try

@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace CippSharp.Core
+namespace CippSharp.Core.Containers
 {
 	public interface ISimplePair<T, K>
 	{
@@ -8,10 +8,5 @@ namespace CippSharp.Core
 		K Value { get; }
 
 		KeyValuePair<T, K> ToKeyValuePair();
-	}
-
-	public static class SimplePairUtils
-	{
-		
 	}
 }
