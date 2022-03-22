@@ -6,6 +6,9 @@ namespace CippSharp.Core.Containers
     public interface ICollectionContainer<K, T> : IContainer<K>, IEnumerable<T> 
         where K : ICollection<T>
     {
+        /// <summary>
+        /// The collection
+        /// </summary>
         ICollection<T> Collection { get; }
         
         /// <summary>

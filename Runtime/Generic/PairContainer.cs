@@ -85,11 +85,8 @@ namespace CippSharp.Core.Containers
         /// <summary>
         /// The type of the stored value
         /// </summary>
-        public override Type ContainerType
-        {
-            get => typeof(PairContainer<TKey, TValue>);
-        }
-        
+        public override Type ContainerType => typeof(PairContainer<TKey, TValue>);
+
         /// <summary>
         /// Retrieve all the contained element
         /// </summary>

@@ -9,7 +9,7 @@ namespace CippSharp.Core.Containers
     /// </summary>
     /// <typeparam name="T"></typeparam>
     [Serializable]
-    public class Container<T> : AContainerBase, IContainer<object>, IContainer<T>
+    public class Container<T> : AContainerBase, IContainer<T>
     {
         /// <summary>
         /// The stored data/value
@@ -49,13 +49,13 @@ namespace CippSharp.Core.Containers
             return value;
         }
 
-        /// <summary>
-        /// Retrieve the contained element
-        /// </summary>
-        object IContainer<object>.GetValue()
-        {
-            return value;
-        }
+//        /// <summary>
+//        /// Retrieve the contained element
+//        /// </summary>
+//        object IContainer<object>.GetValue()
+//        {
+//            return value;
+//        }
         
         /// <summary>
         /// Retrieve the contained element

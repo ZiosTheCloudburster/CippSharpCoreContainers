@@ -13,22 +13,77 @@ namespace CippSharp.Core.Containers
         #region Conversions
 
         /// <summary>
-        /// To Dictionary from an IEnumerable of KeyValuePairs of same Types as Dictionary
+        /// From list of Keys and Values to Dictionary
+        /// 
+        /// Warning: keys and values MUST have the same length
         /// </summary>
-        /// <param name="array"></param>
-        /// <typeparam name="T"></typeparam>
-        /// <typeparam name="F"></typeparam>
+        /// <param name="keys"></param>
+        /// <param name="values"></param>
+        /// <typeparam name="TKey"></typeparam>
+        /// <typeparam name="TValue"></typeparam>
         /// <returns></returns>
-        public static Dictionary<T, F> ToDictionary<T, F>(IEnumerable<KeyValuePair<T, F>> array)
+        public static Dictionary<TKey, TValue> ToDictionary<TKey, TValue>(List<TKey> keys, List<TValue> values)
         {
-            Dictionary<T, F> newDictionary = new Dictionary<T, F>();
-            foreach (var keyValuePair in array)
+            Dictionary<TKey, TValue> newDictionary = new Dictionary<TKey, TValue>();
+            
+            for (int i = 0; i < keys.Count; i++)
             {
-                newDictionary[keyValuePair.Key] = keyValuePair.Value;
+                newDictionary[keys[i]] = values[i];
             }
+
             return newDictionary;
         }
         
+//        /// <summary>
+//        /// To Dictionary from an IEnumerable of KeyValuePairs of same Types as Dictionary
+//        /// </summary>
+//        /// <param name="array"></param>
+//        /// <typeparam name="TKey"></typeparam>
+//        /// <typeparam name="TValue"></typeparam>
+//        /// <returns></returns>
+//        public static Dictionary<TKey, TValue> ToDictionary<TKey, TValue>(IEnumerable<KeyValuePair<TKey, TValue>> array)
+//        {
+//            Dictionary<TKey, TValue> newDictionary = new Dictionary<TKey, TValue>();
+//            foreach (var keyValuePair in array)
+//            {
+//                newDictionary[keyValuePair.Key] = keyValuePair.Value;
+//            }
+//            return newDictionary;
+//        }
+
+        /// <summary>
+        /// From Dictionary to list of Keys and Values
+        /// </summary>
+        /// <param name="dictionary"></param>
+        /// <param name="keys"></param>
+        /// <param name="values"></param>
+        /// <typeparam name="TKey"></typeparam>
+        /// <typeparam name="TValue"></typeparam>
+        public static void FromDictionary<TKey, TValue>(Dictionary<TKey, TValue> dictionary, out List<TKey> keys, out List<TValue> values)
+        {
+            KeyValuePair<TKey, TValue>[] array = dictionary.ToArray();
+            FromDictionary(array, out keys, out values);
+        }
+
+        /// <summary>
+        /// From KeyValuePairsArray
+        /// </summary>
+        /// <param name="pairs"></param>
+        /// <param name="keys"></param>
+        /// <param name="values"></param>
+        /// <typeparam name="TKey"></typeparam>
+        /// <typeparam name="TValue"></typeparam>
+        public static void FromDictionary<TKey, TValue>(KeyValuePair<TKey, TValue>[] pairs, out List<TKey> keys, out List<TValue> values)
+        {
+            keys = new List<TKey>();
+            values = new List<TValue>();
+            foreach (var pair in pairs)
+            {
+                keys.Add(pair.Key);
+                values.Add(pair.Value);
+            }
+        }
+
         #endregion
         
         #region Generic

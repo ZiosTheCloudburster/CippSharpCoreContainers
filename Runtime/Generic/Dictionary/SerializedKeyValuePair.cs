@@ -4,6 +4,8 @@ using System.Collections.Generic;
 namespace CippSharp.Core.Containers
 {
     /// <summary>
+    /// Consider this like an abstract class
+    /// 
     /// Purpose: u must inherit from this class in order to create your custom SerializedKeyValuePair
     /// </summary>
     /// <typeparam name="TKey"></typeparam>
