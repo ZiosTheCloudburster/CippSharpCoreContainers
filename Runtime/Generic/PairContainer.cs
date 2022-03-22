@@ -1,19 +1,17 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Serialization;
-using Object = UnityEngine.Object;
 
 namespace CippSharp.Core.Containers
 {
     /// <summary>
     /// Consider this like an abstract class
     /// </summary>
-    /// <typeparam name="T1"></typeparam>
-    /// <typeparam name="T2"></typeparam>
+    /// <typeparam name="TKey"></typeparam>
+    /// <typeparam name="TValue"></typeparam>
     [Serializable]
-    public class PairContainer<T1, T2> : APairContainerBase, IContainer<object[]>, IContainerPair<T1, T2>, ISimplePair<T1, T2>
+    public class PairContainer<TKey, TValue> : APairContainerBase, IContainer<object>, IContainer<object[]>, IContainerPair<TKey, TValue>, ISimplePair<TKey, TValue>
     {
         [FormerlySerializedAs("m_data")]
         [FormerlySerializedAs("data")]
@@ -22,10 +20,10 @@ namespace CippSharp.Core.Containers
         [FormerlySerializedAs("array")]
         [FormerlySerializedAs("corners")]
         [FormerlySerializedAs("value")]
-        [SerializeField] protected T1 key;
-        public T1 Key => key;
-        [SerializeField] protected T2 value;
-        public T2 Value => value;
+        [SerializeField] protected TKey key;
+        public TKey Key => key;
+        [SerializeField] protected TValue value;
+        public TValue Value => value;
 
         #region Items
         
@@ -36,8 +34,17 @@ namespace CippSharp.Core.Containers
 
         /// <summary>
         /// Items array property.
+        /// 
+        /// Usage: get is 'readonly'.
+        ///
+        /// Example:
+        /// { 
+        ///    object[] pairContainerItems = myPairContainer.Items;
+        ///     //DoStuffs;
+        ///    myPairContainer.Items = pairContainerItems;
+        /// } 
         /// </summary>
-        public virtual object[] Items
+        protected virtual object[] Items
         {
             get
             {
@@ -48,16 +55,31 @@ namespace CippSharp.Core.Containers
             set
             {
                 this.items[0] = value[0];
-                this.key = CastUtils.ToOrDefault<T1>(value[0]);
+                this.key = CastUtils.ToOrDefault<TKey>(value[0]);
                 this.items[1] = value[1];
-                this.value = CastUtils.ToOrDefault<T2>(value[1]);
+                this.value = CastUtils.ToOrDefault<TValue>(value[1]);
             }
         }
         
         #endregion
 
+        /// <summary>
+        /// The fixed array length;
+        /// </summary>
         public virtual int Count => 2;
-        
+
+        public PairContainer()
+        {
+            this.key = default(TKey);
+            this.value = default(TValue);
+        }
+
+        public PairContainer(TKey key, TValue value)
+        {
+            this.key = key;
+            this.value = value;
+        }
+
         #region IContainerBase and IContainer Implementation
         
         /// <summary>
@@ -65,43 +87,49 @@ namespace CippSharp.Core.Containers
         /// </summary>
         public override Type ContainerType
         {
-            get => typeof(PairContainer<T1, T2>);
+            get => typeof(PairContainer<TKey, TValue>);
         }
         
         /// <summary>
-        /// Retrieve the contained element
+        /// Retrieve all the contained element
         /// </summary>
         /// <returns></returns>
         public override object GetValueRaw()
         {
             return Items;
         }
-        
+
         /// <summary>
-        /// Retrieve the contained element
+        /// Retrieve first of the two elements
         /// </summary>
         /// <returns></returns>
-        public virtual object[] GetValue()
+        public virtual TKey GetKey()
+        {
+            return key;
+        }
+        
+        /// <summary>
+        /// Retrieve second of the two elements
+        /// </summary>
+        /// <returns></returns>
+        public virtual TValue GetValue()
+        {
+            return value;
+        }
+
+        object IContainer<object>.GetValue()
         {
             return Items;
         }
         
+        /// <inheritdoc />
         /// <summary>
-        /// Retrieve the contained element
+        /// Retrieve all the contained element
         /// </summary>
-        public T GetValue<T>(PairElement target) where T : T1, T2
+        /// <returns></returns>
+        object[] IContainer<object[]>.GetValue()
         {
-            switch (target)
-            {
-                case PairElement.Key:
-                    return (T) key;
-                case PairElement.Value:
-                    return (T) value;
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(target), target, null);
-            }
-            
-            return default(T);
+            return Items;
         }
         
         /// <summary>
@@ -119,37 +147,33 @@ namespace CippSharp.Core.Containers
         /// Read/Write on data/value
         /// </summary>
         /// <param name="access"></param>
-        public void Access(AccessDelegate<object[]> access)
+        public void Access(AccessDelegate<object> access)
+        {
+            object o = Items;
+            access.Invoke(ref o);
+            Items = (object[])o;
+        }
+        
+        /// <summary>
+        /// Read/Write on data/value
+        /// </summary>
+        /// <param name="access"></param>
+        public virtual void Access(AccessDelegate<object[]> access)
         {
             object[] o = Items;
             access.Invoke(ref o);
             Items = o;
         }
-
+        
         /// <summary>
-        /// Read/Write on data/value
+        /// Custom edit of data
         /// </summary>
-        /// <param name="target"></param>
         /// <param name="access"></param>
-        public void Access<T>(PairElement target, AccessDelegate<T> access) where T : T1, T2
+        public virtual void Access(AccessDelegate<TKey, TValue> access)
         {
-            switch (target)
-            {
-                case PairElement.Key:
-                    T tmpKey = (T)key;
-                    access.Invoke(ref tmpKey);
-                    key = tmpKey;
-                    break;
-                case PairElement.Value:
-                    T tmpValue = (T) value;
-                    access.Invoke(ref tmpValue);
-                    value = tmpValue;
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(target), target, null);
-            }
+            access.Invoke(ref key, ref value);
         }
-
+        
         /// <summary>
         /// Predicate on data/value
         /// </summary>
@@ -166,77 +190,83 @@ namespace CippSharp.Core.Containers
         /// Predicate on data/value
         /// </summary>
         /// <param name="access"></param>
-        public bool Check(PredicateAccessDelegate<object[]> access)
+        public bool Check(PredicateAccessDelegate<object> access)
+        {
+            object o = Items;
+            bool check = access.Invoke(ref o);
+            Items = (object[])o;
+            return check;
+        }
+        
+        /// <summary>
+        /// Predicate on data/value
+        /// </summary>
+        /// <param name="access"></param>
+        public virtual bool Check(PredicateAccessDelegate<object[]> access)
         {
             object[] o = Items;
             bool check = access.Invoke(ref o);
             Items = o;
             return check;
         }
-
+        
         /// <summary>
         /// Predicate on data/value
         /// </summary>
-        /// <param name="target"></param>
         /// <param name="access"></param>
-        public bool Check<T>(PairElement target, PredicateAccessDelegate<T> access) where T : T1, T2
+        public virtual bool Check(PredicateAccessDelegate<TKey, TValue> access)
         {
-            bool check = false;
-            switch (target)
-            {
-                case PairElement.Key:
-                    T tmpKey = (T)key;
-                    check = access.Invoke(ref tmpKey);
-                    key = tmpKey;
-                    break;
-                case PairElement.Value:
-                    T tmpValue = (T) value;
-                    check = access.Invoke(ref tmpValue);
-                    value = tmpValue;
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(target), target, null);
-            }
-            
-            return check;
+            return access.Invoke(ref key, ref value);
         }
 
         public override void Set(object newValue)
         {
-            
+            if (CastUtils.To(newValue, out object[] newItems))
+            {
+                Items = newItems;
+            }
         }
         
-        public void Set(object[] newValue)
+        public virtual void Set(object[] newValue)
         {
-            throw new NotImplementedException();
+            Items = newValue;
         }
         
-        public void Set<T>(PairElement target, T newValue) where T : T1, T2
+        public virtual void Set(TKey newKey, TValue newValue)
         {
-            
+            this.key = newKey;
+            this.value = newValue;
         }
-        
+
+        public virtual void SetKey(TKey newKey)
+        {
+            this.key = newKey;
+        }
+
+        public virtual void SetValue(TValue newValue)
+        {
+            this.value = newValue;
+        }
         
         #endregion
-
         
-        public KeyValuePair<T1, T2> ToKeyValuePair()
+        public virtual KeyValuePair<TKey, TValue> ToKeyValuePair()
         {
-            
+            return this;
         }
 
-      
-
-     
-
+        #region Operators
        
-
+        public static implicit operator KeyValuePair<TKey, TValue>(PairContainer<TKey, TValue> pair)
+        {
+            return new KeyValuePair<TKey, TValue>(pair.Key, pair.Value);
+        }
         
-
-  
-
+        public static implicit operator PairContainer<TKey, TValue>(KeyValuePair<TKey, TValue> pair)
+        {
+            return new PairContainer<TKey, TValue>(pair.Key, pair.Value);
+        }
         
-
-        
+        #endregion
     }
 }

@@ -9,7 +9,7 @@ namespace CippSharp.Core.Containers
     /// </summary>
     /// <typeparam name="T"></typeparam>
     [Serializable]
-    public class Container<T> : AContainerBase, IContainer<T>
+    public class Container<T> : AContainerBase, IContainer<object>, IContainer<T>
     {
         /// <summary>
         /// The stored data/value
@@ -52,6 +52,14 @@ namespace CippSharp.Core.Containers
         /// <summary>
         /// Retrieve the contained element
         /// </summary>
+        object IContainer<object>.GetValue()
+        {
+            return value;
+        }
+        
+        /// <summary>
+        /// Retrieve the contained element
+        /// </summary>
         public virtual T GetValue ()
         {
             return value;
@@ -62,6 +70,17 @@ namespace CippSharp.Core.Containers
         /// </summary>
         /// <param name="access"></param>
         public override void Access(GenericAccessDelegate access)
+        {
+            object o = value;
+            access.Invoke(ref o);
+            value = (T)o;
+        }
+        
+        /// <summary>
+        /// Read/Write on data/value
+        /// </summary>
+        /// <param name="access"></param>
+        public void Access(AccessDelegate<object> access)
         {
             object o = value;
             access.Invoke(ref o);
@@ -93,11 +112,23 @@ namespace CippSharp.Core.Containers
         /// Predicate on data/value
         /// </summary>
         /// <param name="access"></param>
+        public bool Check(PredicateAccessDelegate<object> access)
+        {
+            object o = value;
+            bool b = access.Invoke(ref o);
+            value = (T)o;
+            return b;
+        }
+        
+        /// <summary>
+        /// Predicate on data/value
+        /// </summary>
+        /// <param name="access"></param>
         public virtual bool Check(PredicateAccessDelegate<T> access)
         {
             return access.Invoke(ref value);
         }
-        
+
         /// <summary>
         /// Set the contained element
         /// </summary>

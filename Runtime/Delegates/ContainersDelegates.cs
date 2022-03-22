@@ -39,11 +39,4 @@ namespace CippSharp.Core.Containers
     /// <typeparam name="T1"></typeparam>
     /// <typeparam name="T2"></typeparam>
     public delegate bool PredicateAccessDelegate<T1, T2>(ref T1 data1, ref T2 data2);
-
-//    /// <summary>
-//    /// To
-//    /// </summary>
-//    /// <param name="element"></param>
-//    /// <typeparam name="T"></typeparam>
-//    public delegate T MatchAccessDelegate<T>(ref T element);
 }

@@ -1,46 +1,40 @@
 ﻿using System;
 using System.Collections.Generic;
-using UnityEngine;
 
-namespace CippSharp.Core
+namespace CippSharp.Core.Containers
 {
     /// <summary>
     /// Purpose: u must inherit from this class in order to create your custom SerializedKeyValuePair
     /// </summary>
-    /// <typeparam name="K"></typeparam>
-    /// <typeparam name="V"></typeparam>
+    /// <typeparam name="TKey"></typeparam>
+    /// <typeparam name="TValue"></typeparam>
     [Serializable]
-    public class SerializedKeyValuePair<K, V> : ISimplePair<K, V>
+    public class SerializedKeyValuePair<TKey, TValue> : PairContainer<TKey, TValue>
     {
-        [SerializeField] protected K key;
-        public K Key => key;
-        [SerializeField] protected V value;
-        public V Value => value;
-
-        public SerializedKeyValuePair(K key, V value)
+        public SerializedKeyValuePair()
+        {
+            this.key = default(TKey);
+            this.value = default(TValue);
+        }
+        
+        public SerializedKeyValuePair(TKey key, TValue value)
         {
             this.key = key;
             this.value = value;
         }
-
-        public KeyValuePair<K, V> ToKeyValuePair()
+        
+        #region Operators
+        
+        public static implicit operator KeyValuePair<TKey, TValue>(SerializedKeyValuePair<TKey, TValue> sk)
         {
-            return this;
-        }
-
-        public void SetNewValue(V newValue)
-        {
-            this.value = newValue;
-        }
-
-        public static implicit operator KeyValuePair<K, V>(SerializedKeyValuePair<K, V> sk)
-        {
-            return new KeyValuePair<K, V>(sk.Key, sk.Value);
+            return new KeyValuePair<TKey, TValue>(sk.Key, sk.Value);
         }
         
-        public static implicit operator SerializedKeyValuePair<K, V>(KeyValuePair<K, V> k)
+        public static implicit operator SerializedKeyValuePair<TKey, TValue>(KeyValuePair<TKey, TValue> k)
         {
-            return new SerializedKeyValuePair<K, V>(k.Key, k.Value);
+            return new SerializedKeyValuePair<TKey, TValue>(k.Key, k.Value);
         }
+        
+        #endregion
     }
 }
