@@ -9,7 +9,7 @@ namespace CippSharpEditor.Core.Containers
     public class APagedArrayContainerDrawer : PropertyDrawer
     {
         //references
-        protected const string arrayPropertyName = "array";
+        protected const string arrayPropertyName = "value";
         protected SerializedProperty arrayProperty = null;
         protected const string elementsPerPageName = "elementsPerPage";
         protected SerializedProperty elementsPerPageProperty = null;
@@ -60,7 +60,7 @@ namespace CippSharpEditor.Core.Containers
                 pageIndex = pageIndexProperty.intValue;
 
                 //Start with computation
-                int pagesLength = (Mathf.CeilToInt((float) length / (float) elementsPerPageProperty.intValue)) - 1;
+                int pagesLength = (Mathf.CeilToInt((float) length / (float) elementsPerPageProperty.intValue));
                 if (pageIndex > pagesLength)
                 {
                     Debug.LogWarning("Pages index out of range! Last page will be drawn instead.");
