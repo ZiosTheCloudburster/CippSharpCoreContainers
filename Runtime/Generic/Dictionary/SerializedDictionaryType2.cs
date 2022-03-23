@@ -1,6 +1,10 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 using UnityEngine;
 
 namespace CippSharp.Core.Containers
@@ -17,12 +21,20 @@ namespace CippSharp.Core.Containers
     /// <typeparam name="TKey"></typeparam>
     /// <typeparam name="TValue"></typeparam>
     [Serializable]
-    public class SerializedDictionary<TKey, TValue> : SerializedDictionaryBase, IContainer<object>, IContainer<object[]>, IContainerPair<List<TKey>, List<TValue>>, ISimplePair<List<TKey>, List<TValue>>, IDictionaryContainer<TKey, TValue>
+    public class SerializedDictionary<TKey, TValue> : SerializedDictionaryBase, 
+        IContainer<object>, IContainer<object[]>, IContainerPair<List<TKey>, List<TValue>>, IDictionaryContainer<TKey, TValue>,
+        ISimplePair<List<TKey>, List<TValue>>, ISerializationCallbackReceiver
     {
         [SerializeField] private List<TKey> keys = new List<TKey>();
         public List<TKey> Key => keys;
         [SerializeField] private List<TValue> values = new List<TValue>();
         public List<TValue> Value => values;
+
+#if UNITY_EDITOR
+        [SerializeField, NotEditable] private string messages = string.Empty;
+        private float update = 1.0f;
+        private double nextUpdate = 0;
+#endif
         
         #region Items
         
@@ -53,9 +65,7 @@ namespace CippSharp.Core.Containers
             }
             set
             {
-                this.items[0] = value[0];
                 this.keys = CastUtils.ToOrDefault<List<TKey>>(value[0]);
-                this.items[1] = value[1];
                 this.values = CastUtils.ToOrDefault<List<TValue>>(value[1]);
             }
         }
@@ -107,7 +117,7 @@ namespace CippSharp.Core.Containers
         /// Retrieve first of the two elements
         /// </summary>
         /// <returns></returns>
-        public List<TKey> GetKey()
+        public virtual List<TKey> GetKey()
         {
             return keys;
         }
@@ -116,7 +126,7 @@ namespace CippSharp.Core.Containers
         /// Retrieve second of the two elements
         /// </summary>
         /// <returns></returns>
-        public List<TValue> GetValue()
+        public virtual List<TValue> GetValue()
         {
             return values;
         }
@@ -146,7 +156,7 @@ namespace CippSharp.Core.Containers
         /// Read/Write on data/value
         /// </summary>
         /// <param name="access"></param>
-        public void Access(AccessDelegate<object> access)
+        public virtual void Access(AccessDelegate<object> access)
         {
             object o = Items;
             access.Invoke(ref o);
@@ -157,7 +167,7 @@ namespace CippSharp.Core.Containers
         /// Read/Write on data/value
         /// </summary>
         /// <param name="access"></param>
-        public void Access(AccessDelegate<object[]> access)
+        public virtual void Access(AccessDelegate<object[]> access)
         {
             object[] o = Items;
             access.Invoke(ref o);
@@ -168,7 +178,7 @@ namespace CippSharp.Core.Containers
         /// Read/Write on data/value
         /// </summary>
         /// <param name="access"></param>
-        public void Access(AccessDelegate<List<TKey>, List<TValue>> access)
+        public virtual void Access(AccessDelegate<List<TKey>, List<TValue>> access)
         {
             access.Invoke(ref keys, ref values);
         }
@@ -189,7 +199,7 @@ namespace CippSharp.Core.Containers
         /// Predicate on data/value
         /// </summary>
         /// <param name="access"></param>
-        public bool Check(PredicateAccessDelegate<object> access)
+        public virtual bool Check(PredicateAccessDelegate<object> access)
         {
             object o = Items;
             bool check = access.Invoke(ref o);
@@ -201,7 +211,7 @@ namespace CippSharp.Core.Containers
         /// Predicate on data/value
         /// </summary>
         /// <param name="access"></param>
-        public bool Check(PredicateAccessDelegate<object[]> access)
+        public virtual bool Check(PredicateAccessDelegate<object[]> access)
         {
             object[] o = Items;
             bool check = access.Invoke(ref o);
@@ -213,7 +223,7 @@ namespace CippSharp.Core.Containers
         /// Predicate on data/value
         /// </summary>
         /// <param name="access"></param>
-        public bool Check(PredicateAccessDelegate<List<TKey>, List<TValue>> access)
+        public virtual bool Check(PredicateAccessDelegate<List<TKey>, List<TValue>> access)
         {
             return access.Invoke(ref keys, ref values);
         }
@@ -236,23 +246,23 @@ namespace CippSharp.Core.Containers
             }
         }
         
-        public void Set(object[] newItems)
+        public virtual void Set(object[] newItems)
         {
             Items = newItems;
         }
         
-        public void Set(List<TKey> newKeys, List<TValue> newValues)
+        public virtual void Set(List<TKey> newKeys, List<TValue> newValues)
         {
             this.keys = newKeys;
             this.values = newValues;
         }
 
-        public void SetKey(List<TKey> newKeys)
+        public virtual void SetKey(List<TKey> newKeys)
         {
             this.keys = newKeys;
         }
 
-        public void SetValue(List<TValue> newValues)
+        public virtual void SetValue(List<TValue> newValues)
         {
             this.values = newValues;
         }
@@ -275,10 +285,33 @@ namespace CippSharp.Core.Containers
         public virtual KeyValuePair<TKey, TValue> this[int index]
         {
             get => new KeyValuePair<TKey, TValue>(keys[index], values[index]);
+            set => this[value.Key] = value.Value;
+        }
+        
+        /// <summary>
+        /// Value at Key
+        /// </summary>
+        /// <param name="key"></param>
+        public virtual TValue this[TKey key]
+        {
+            get
+            {
+                int index = keys.IndexOf(key);
+                return values[index];
+            }
             set
             {
-                this.keys[index] = value.Key;
-                this.values[index] = value.Value;
+                int index = keys.IndexOf(key);
+                //if that is not contained... add a new element as in real c# dictionaries 
+                if (!ArrayUtils.IsValidIndex(index, values))
+                {
+                    keys.Add(key);
+                    values.Add(value);
+                }
+                else
+                {
+                    values[index] = value;
+                }
             }
         }
 
@@ -293,14 +326,23 @@ namespace CippSharp.Core.Containers
             values.Clear();
         }
 
-        public void Access(AccessDelegate<ICollection<KeyValuePair<TKey, TValue>>> access)
+        /// <summary>
+        /// Access the collection of key value pairs
+        /// </summary>
+        /// <param name="access"></param>
+        public virtual void Access(AccessDelegate<ICollection<KeyValuePair<TKey, TValue>>> access)
         {
             ICollection<KeyValuePair<TKey, TValue>> c = ToDictionary();
             access.Invoke(ref c);
             ReadCollection(c);
         }
 
-        public bool Check(PredicateAccessDelegate<ICollection<KeyValuePair<TKey, TValue>>> access)
+        /// <summary>
+        /// Check the collection of key value pairs
+        /// </summary>
+        /// <param name="access"></param>
+        /// <returns></returns>
+        public virtual bool Check(PredicateAccessDelegate<ICollection<KeyValuePair<TKey, TValue>>> access)
         {
             ICollection<KeyValuePair<TKey, TValue>> c = ToDictionary();
             bool check = access.Invoke(ref c);
@@ -308,50 +350,104 @@ namespace CippSharp.Core.Containers
             return check;
         }
 
-        public void Set(ICollection<KeyValuePair<TKey, TValue>> newValue)
+        /// <summary>
+        /// Set a new collection
+        /// </summary>
+        /// <param name="newValue"></param>
+        public virtual void Set(ICollection<KeyValuePair<TKey, TValue>> newValue)
         {
             ReadCollection(newValue);
         }
         
-        public void Add(KeyValuePair<TKey, TValue> element)
+        /// <summary>
+        /// WARNING: you cannot add an element with same key.
+        /// </summary>
+        /// <param name="element"></param>
+        public virtual void Add(KeyValuePair<TKey, TValue> element)
         {
+            if (!TryAdd(element))
+            {
+                Debug.LogWarning("Key already present in the dictionary.");
+            }
+        }
+
+        /// <summary>
+        /// WARNING: you cannot add multiple elements with same key
+        /// </summary>
+        /// <param name="enumerable"></param>
+        public virtual void AddRange(IEnumerable<KeyValuePair<TKey, TValue>> enumerable)
+        {
+            KeyValuePair<TKey, TValue>[] array = enumerable.ToArray();
+            foreach (var t in array)
+            {
+                TryAdd(t);
+            }
+        }
+
+        /// <summary>
+        /// Tries to add an element to dictionary
+        /// </summary>
+        /// <param name="element"></param>
+        /// <returns>success</returns>
+        private bool TryAdd(KeyValuePair<TKey, TValue> element)
+        {
+            TKey tmpKey = element.Key;
+            if (keys.Contains(tmpKey))
+            {
+               
+                return false;
+            }
+
             keys.Add(element.Key);
             values.Add(element.Value);
+            return true;
+        }
+        
+
+        public virtual bool Contains(KeyValuePair<TKey, TValue> element)
+        {
+            return ToArray().Contains(element);
         }
 
-        public void AddRange(IEnumerable<KeyValuePair<TKey, TValue>> enumerable)
+        public virtual int IndexOf(KeyValuePair<TKey, TValue> element)
         {
-            throw new NotImplementedException();
+            return ToArray().IndexOf(element);
         }
 
-        public bool Contains(KeyValuePair<TKey, TValue> element)
+        public virtual bool Find(Predicate<KeyValuePair<TKey, TValue>> predicate, out KeyValuePair<TKey, TValue> result)
         {
-            throw new NotImplementedException();
+            return ArrayUtils.Find(ToArray(), predicate, out result);
         }
 
-        public int IndexOf(KeyValuePair<TKey, TValue> element)
+        public virtual bool Remove(KeyValuePair<TKey, TValue> element)
         {
-            throw new NotImplementedException();
+            KeyValuePair<TKey, TValue>[] array = ToArray();
+            int index = ArrayUtils.IndexOf(array, element);
+            if (ArrayUtils.IsValidIndex(index, array))
+            {
+                keys.RemoveAt(index);
+                values.RemoveAt(index);
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
 
-        public bool Find(Predicate<KeyValuePair<TKey, TValue>> predicate, out KeyValuePair<TKey, TValue> result)
+        public virtual void RemoveAt(int index)
         {
-            throw new NotImplementedException();
+            int length = Count;
+            if (index >= 0 && index < length)
+            {
+                keys.RemoveAt(index);
+                values.RemoveAt(index);
+            }
         }
 
-        public bool Remove(KeyValuePair<TKey, TValue> element)
+        public virtual KeyValuePair<TKey, TValue>[] ToArray()
         {
-            throw new NotImplementedException();
-        }
-
-        public void RemoveAt(int index)
-        {
-            throw new NotImplementedException();
-        }
-
-        public KeyValuePair<TKey, TValue>[] ToArray()
-        {
-            throw new NotImplementedException();
+            return ArrayUtils.ToArray(keys, values);
         }
 
         public override bool IsNullOrEmpty()
@@ -361,25 +457,17 @@ namespace CippSharp.Core.Containers
         
         ICollection<KeyValuePair<TKey, TValue>> IContainer<ICollection<KeyValuePair<TKey, TValue>>>.GetValue()
         {
-            throw new NotImplementedException();
+            return ToDictionary();
         }
 
-        public IEnumerator<KeyValuePair<TKey, TValue>> GetEnumerator()
+        public virtual IEnumerator<KeyValuePair<TKey, TValue>> GetEnumerator()
         {
-            throw new NotImplementedException();
+            return ToDictionary().GetEnumerator();
         }
 
         IEnumerator IEnumerable.GetEnumerator()
         {
             return GetEnumerator();
-        }
-
-       
-
-        public TValue this[TKey key]
-        {
-            get => throw new NotImplementedException();
-            set => throw new NotImplementedException();
         }
         
         #endregion
@@ -399,7 +487,8 @@ namespace CippSharp.Core.Containers
         /// <param name="collection"></param>
         public virtual void ReadCollection(ICollection<KeyValuePair<TKey, TValue>> collection)
         {
-            ArrayUtils.SplitCollection(collection, out keys, out values);
+            Clear();
+            AddRange(collection);
         }
         
         /// <summary>
@@ -408,7 +497,8 @@ namespace CippSharp.Core.Containers
         /// <param name="dictionary"></param>
         public virtual void ReadDictionary(Dictionary<TKey, TValue> dictionary)
         {
-            ArrayUtils.SplitDictionary(dictionary, out keys, out values);
+            Clear();
+            AddRange(dictionary);
         }
       
         /// <summary>
@@ -419,6 +509,40 @@ namespace CippSharp.Core.Containers
         {
             return this;
         }
+
+        #region ISerializationCallbackReceiver Implementation
+
+        public virtual void OnBeforeSerialize()
+        {
+#if UNITY_EDITOR
+            var editorTime = EditorApplication.timeSinceStartup;
+            if (nextUpdate < editorTime)
+            {
+                nextUpdate = editorTime + update;
+                DelayedUpdate();
+            }
+#endif
+        }
+        
+#if UNITY_EDITOR
+        private void DelayedUpdate()
+        {
+            if (ArrayUtils.HasDuplicates(keys))
+            {
+                messages = "WARNING: you keys are containing a duplicate. This is not allowed in dictionaries.";
+            }
+            else
+            {
+                messages = string.Empty;
+            }
+        }
+#endif
+        public virtual void OnAfterDeserialize()
+        {
+            
+        }
+
+        #endregion
 
         #region Operators
 
@@ -433,9 +557,6 @@ namespace CippSharp.Core.Containers
         }
 
         #endregion
-
-
-     
     }
 
     #endregion

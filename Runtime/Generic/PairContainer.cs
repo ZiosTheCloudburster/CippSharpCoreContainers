@@ -54,9 +54,7 @@ namespace CippSharp.Core.Containers
             }
             set
             {
-                this.items[0] = value[0];
                 this.key = CastUtils.ToOrDefault<TKey>(value[0]);
-                this.items[1] = value[1];
                 this.value = CastUtils.ToOrDefault<TValue>(value[1]);
             }
         }

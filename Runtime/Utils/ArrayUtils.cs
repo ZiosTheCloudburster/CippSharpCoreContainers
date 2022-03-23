@@ -33,6 +33,28 @@ namespace CippSharp.Core.Containers
 
             return newDictionary;
         }
+
+        /// <summary>
+        /// From list of Keys and Values to Array of KeyValuePairs
+        ///
+        /// Warning: keys and values MUST have the same length
+        /// </summary>
+        /// <param name="keys"></param>
+        /// <param name="values"></param>
+        /// <typeparam name="TKey"></typeparam>
+        /// <typeparam name="TValue"></typeparam>
+        /// <returns></returns>
+        public static KeyValuePair<TKey, TValue>[] ToArray<TKey, TValue>(List<TKey> keys, List<TValue> values)
+        {
+            int length = keys.Count;
+            KeyValuePair<TKey, TValue>[] newArray = new KeyValuePair<TKey, TValue>[length];
+            for (int i = 0; i < length; i++)
+            {
+                newArray[i] = new KeyValuePair<TKey, TValue>(keys[i], values[i]);
+            }
+
+            return newArray;
+        }
         
 //        /// <summary>
 //        /// To Dictionary from an IEnumerable of KeyValuePairs of same Types as Dictionary
@@ -50,6 +72,12 @@ namespace CippSharp.Core.Containers
 //            }
 //            return newDictionary;
 //        }
+        
+        public static void SplitEnumerable<TKey, TValue>(IEnumerable<KeyValuePair<TKey, TValue>> enumerable, out List<TKey> keys, out List<TValue> values)
+        {
+            KeyValuePair<TKey, TValue>[] array = enumerable.ToArray();
+            SplitArray(array, out keys, out values);
+        }
 
         public static void SplitCollection<TKey, TValue>(ICollection<KeyValuePair<TKey, TValue>> collection, out List<TKey> keys, out List<TValue> values)
         {
@@ -221,6 +249,8 @@ namespace CippSharp.Core.Containers
         
         #endregion
 
+        
+        
 //        #region Index Of
 //
 //        /// <summary>
@@ -246,6 +276,39 @@ namespace CippSharp.Core.Containers
 //        }
 //
 //        #endregion
+
+        #region Has Duplicates
+
+        /// <summary>
+        /// Has Duplicates?
+        /// </summary>
+        /// <param name="list"></param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public static bool HasDuplicates<T>(List<T> list) 
+        {
+            HashSet<T> hs = new HashSet<T>();
+            return list.Any(t => !hs.Add(t));
+        }
+
+        #endregion
+
+        #region Index Of
+
+        /// <summary>
+        /// Index of element in the array
+        /// </summary>
+        /// <param name="array"></param>
+        /// <param name="element"></param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public static int IndexOf<T>(T[] array, T element)
+        {
+            return Array.IndexOf(array, element);
+        }
+
+        #endregion
+        
         
         #region Is Null or Empty
         
