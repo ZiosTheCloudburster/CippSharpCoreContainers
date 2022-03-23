@@ -541,13 +541,17 @@ namespace CippSharp.Core.Containers
 #if UNITY_EDITOR
         private void DelayedUpdate()
         {
+            messages = string.Empty;
+            int warningCount = 0;
+            if ((keys != null && values != null) && (keys.Count != values.Count))
+            {
+                messages += $"WARNING: {nameof(keys)} and {nameof(values)} must have same count.";
+                warningCount++;
+            }
             if (ArrayUtils.HasDuplicates(keys))
             {
-                messages = "WARNING: you keys are containing a duplicate. This is not allowed in dictionaries.";
-            }
-            else
-            {
-                messages = string.Empty;
+                messages += $"{(warningCount > 0 ? "\t" : string.Empty)}WARNING: you keys are containing a duplicate. This is not allowed in dictionaries.";
+                warningCount++;
             }
         }
 #endif

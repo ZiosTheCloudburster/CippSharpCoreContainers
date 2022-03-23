@@ -5,6 +5,9 @@ namespace CippSharp.Core.Containers.Samples
 {
     public class SerializedPairsSamples : MonoBehaviour
     {
+        public string message = "See what happens during runtime.";
+        
+        [Space(5)]
         [SerializeField] private RendererMaterialsPair savedRendererMaterials;
         [SerializeField] private MeshRendererMeshFilterPair savedMeshRendererMeshFilterPair;
 
