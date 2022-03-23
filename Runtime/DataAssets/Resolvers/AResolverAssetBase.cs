@@ -1,6 +1,4 @@
-﻿using System;
-using UnityEngine;
-
+﻿
 namespace CippSharp.Core.Containers
 {
     /// <summary>

@@ -7,7 +7,7 @@ using UnityEditor;
 namespace CippSharp.Core.Containers
 {
     /// <summary>
-    /// Disable GUI on current field
+    /// Disable GUI on current property
     /// </summary>
     [AttributeUsage(AttributeTargets.Field, AllowMultiple = false, Inherited = true)]
     internal class NotEditableAttribute : PropertyAttribute

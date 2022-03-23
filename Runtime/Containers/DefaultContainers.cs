@@ -298,17 +298,6 @@ namespace CippSharp.Core.Containers
     }
 
     #endregion
-
-
-//    #region LevelReference
-//    
-//    [Serializable]
-//    public class LevelReferenceListContainer : ListContainer<LevelReference>
-//    {
-//            
-//    }
-//    
-//    #endregion
 }
 
 

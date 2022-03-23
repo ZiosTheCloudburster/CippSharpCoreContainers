@@ -18,12 +18,6 @@ namespace CippSharp.Core.Containers
             get => value;
             set => this.value = value;
         }
-
-//        public Vector3 this[int index]
-//        {
-//            get => corners[index];
-//            set => corners[index] = value;
-//        }
         
         public override int Count => 4;
 
@@ -39,7 +33,7 @@ namespace CippSharp.Core.Containers
         }
 
         /// <summary>
-        /// Ensure the length of the corners
+        /// Ensure that the length of the corners is 4
         /// </summary>
         public void OnBeforeSerialize()
         {

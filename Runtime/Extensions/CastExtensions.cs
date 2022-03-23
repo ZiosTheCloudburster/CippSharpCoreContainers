@@ -14,7 +14,9 @@ namespace CippSharp.Core.Containers
         }
 
         /// <summary>
-        /// Casts an object to type T. In case of failure returns T default value.
+        /// Returns true if successfully casted to T.
+        /// Casts an object to type T.
+        /// In case of failure returns false and T default value.
         /// </summary>
         /// <param name="target"></param>
         /// <param name="result"></param>

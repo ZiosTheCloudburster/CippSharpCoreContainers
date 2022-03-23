@@ -9,13 +9,14 @@ namespace CippSharp.Core.Containers.Legacy
 {
     /// <summary>
     /// To keep just as reference.
-    /// Please use the new non legacy <see cref="UrlDataAsset"/>
+    /// Please use the new non legacy <see cref="CippSharp.Core.Containers.ReadMeAsset"/>
     /// </summary>
-//    [CreateAssetMenu(menuName = nameof(CippSharp)+"/Data Assets/ReadMe Asset")]
     [Obsolete("Legacy Link Holder Asset. Use the non-legacy ReadMeAsset instead.")]
-    public class ReadMeAsset : ScriptableObject
+    internal class ReadMeAsset : ScriptableObject
     {
+#pragma warning disable 649
         [TextArea(1, 50)] 
-        public string text;
+        public string text = string.Empty;
+#pragma warning restore 649
     }
 }

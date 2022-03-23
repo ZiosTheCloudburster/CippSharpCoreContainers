@@ -58,23 +58,6 @@ namespace CippSharp.Core.Containers
             return newArray;
         }
         
-//        /// <summary>
-//        /// To Dictionary from an IEnumerable of KeyValuePairs of same Types as Dictionary
-//        /// </summary>
-//        /// <param name="array"></param>
-//        /// <typeparam name="TKey"></typeparam>
-//        /// <typeparam name="TValue"></typeparam>
-//        /// <returns></returns>
-//        public static Dictionary<TKey, TValue> ToDictionary<TKey, TValue>(IEnumerable<KeyValuePair<TKey, TValue>> array)
-//        {
-//            Dictionary<TKey, TValue> newDictionary = new Dictionary<TKey, TValue>();
-//            foreach (var keyValuePair in array)
-//            {
-//                newDictionary[keyValuePair.Key] = keyValuePair.Value;
-//            }
-//            return newDictionary;
-//        }
-        
         public static void SplitEnumerable<TKey, TValue>(IEnumerable<KeyValuePair<TKey, TValue>> enumerable, out List<TKey> keys, out List<TValue> values)
         {
             KeyValuePair<TKey, TValue>[] array = enumerable.ToArray();
@@ -251,32 +234,6 @@ namespace CippSharp.Core.Containers
         
         #endregion
         
-//        #region Index Of
-//
-//        /// <summary>
-//        /// Index of element in target collection.
-//        /// Retrieve -1 if the element is not present.
-//        /// </summary>
-//        /// <param name="array"></param>
-//        /// <param name="element"></param>
-//        /// <typeparam name="T"></typeparam>
-//        /// <returns></returns>
-//        public static int IndexOf<T>(T[] array, T element)
-//        {
-//            for (int i = 0; i < array.Length; i++)
-//            {
-//                var storedElement = array[i];
-//                if ((object)storedElement == (object)element)
-//                {
-//                    return i;
-//                }
-//            }
-//
-//            return -1;
-//        }
-//
-//        #endregion
-
         #region Has Duplicates
 
 //        /// <summary>
@@ -434,34 +391,7 @@ namespace CippSharp.Core.Containers
         
         #endregion
         
-//        #region Random Element
-//
-//        /// <summary>
-//        /// Retrieve a random element in array.
-//        /// </summary>
-//        /// <param name="array"></param>
-//        /// <typeparam name="T"></typeparam>
-//        /// <returns></returns>
-//        public static T RandomElement<T>(T[] array)
-//        {
-//            int index = UnityEngine.Random.Range(0, array.Length);
-//            return array[index];
-//        }
-//        
-//        /// <summary>
-//        /// Retrieve a random element in list.
-//        /// </summary>
-//        /// <param name="list"></param>
-//        /// <typeparam name="T"></typeparam>
-//        /// <returns></returns>
-//        public static T RandomElement<T>(List<T> list)
-//        {
-//            int index = UnityEngine.Random.Range(0, list.Count);
-//            return list[index];
-//        }
-//
-//        #endcregion
-
+        
         #region Remove
 
         /// <summary>
