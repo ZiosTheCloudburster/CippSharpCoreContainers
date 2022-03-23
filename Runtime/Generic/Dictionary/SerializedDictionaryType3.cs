@@ -2,33 +2,44 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-#if UNITY_EDITOR
 using UnityEditor;
-#endif
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace CippSharp.Core.Containers
 {
     /// <summary>
-    /// Serialized Dictionary Type'2
+    /// Serialized Dictionary Type'3
     /// 
     /// Consider this like an abstract class
     /// 
-    /// Usage: Inherit from this class with a custom Serializable class to use this on inspector. 
+    /// Usage: Inherit from this class with a custom Serializable class to use this on inspector.
     /// 
     /// Purpose: populate this by Inspector, during initialization get the Dictionary with ToDictionary at your script Initialization and store it.
+    ///
+    /// Notes: It Supports Reorderable Attribute from CippSharp.ReorderableList 
     /// </summary>
+    /// <typeparam name="T"></typeparam>
     /// <typeparam name="TKey"></typeparam>
     /// <typeparam name="TValue"></typeparam>
     [Serializable]
-    public class SerializedDictionary<TKey, TValue> : SerializedDictionaryBase, 
-        IContainer<object>, IContainer<object[]>, IContainerPair<List<TKey>, List<TValue>>, IDictionaryContainer<TKey, TValue>,
-        ISimplePair<List<TKey>, List<TValue>>, ISerializationCallbackReceiver
+    public abstract class SerializedDictionary<T, TKey, TValue> : SerializedDictionaryBase, IContainer<List<T>>,
+         IDictionaryContainer<TKey, TValue>, ISerializationCallbackReceiver
+        where T : SerializedKeyValuePair<TKey, TValue>
     {
-        [SerializeField] private List<TKey> keys = new List<TKey>();
-        public List<TKey> Key => keys;
-        [SerializeField] private List<TValue> values = new List<TValue>();
-        public List<TValue> Value => values;
+        /// <summary>
+        /// When activator tries to create T and it fails
+        /// </summary>
+        private const string TActivatorFailedMessage = "Failed to create and add a new T instance.";
+        
+        [FormerlySerializedAs("m_data")]
+        [FormerlySerializedAs("data")]
+        [FormerlySerializedAs("m_list")]
+        [FormerlySerializedAs("list")]
+        [FormerlySerializedAs("array")]
+        [FormerlySerializedAs("corners")]
+        [FormerlySerializedAs("value")]
+        [SerializeField] public List<T> value = new List<T>();
 
 #if UNITY_EDITOR
         [SerializeField, NotEditable] private string messages = string.Empty;
@@ -37,86 +48,29 @@ namespace CippSharp.Core.Containers
         private double nextUpdate = 0;
 #endif
         
-        #region Items
-        
-        /// <summary>
-        /// Items array
-        /// </summary>
-        protected readonly object[] items = new object[2];
-
-        /// <summary>
-        /// Items array property.
-        /// 
-        /// Usage: get is 'readonly'.
-        ///
-        /// Example:
-        /// { 
-        ///    object[] pairContainerItems = myPairContainer.Items;
-        ///     //DoStuffs;
-        ///    myPairContainer.Items = pairContainerItems;
-        /// } 
-        /// </summary>
-        protected virtual object[] Items
-        {
-            get
-            {
-                items[0] = keys;
-                items[1] = values;
-                return items;
-            }
-            set
-            {
-                this.keys = CastUtils.ToOrDefault<List<TKey>>(value[0]);
-                this.values = CastUtils.ToOrDefault<List<TValue>>(value[1]);
-            }
-        }
-        
-        #endregion
-
         public SerializedDictionary()
         {
             
         }
-        
-        /// <summary>
-        /// Constructor
-        /// </summary>
-        /// <param name="keys"></param>
-        /// <param name="values"></param>
-        /// <exception cref="IndexOutOfRangeException">if keys count doesn't match values count</exception>
-        /// <exception cref="Exception">if keys contains duplicates</exception>
-        public SerializedDictionary(List<TKey> keys, List<TValue> values)
-        {
-            if (keys != null && values != null)
-            {
-                if (keys.Count != values.Count)
-                {
-                    //Not Supported
-                    throw new IndexOutOfRangeException($"{nameof(keys)} and {nameof(values)} must have same count.");
-                }
-            }
 
-            if (ArrayUtils.HasDuplicates(keys))
+        public SerializedDictionary(IEnumerable<T> range)
+        {
+            if (ArrayUtils.HasDuplicates(range.Select(t => t.Key)))
             {
                 //NotSupported for dictionaries
                 throw new Exception(DictionariesDuplicatesError);
             }
             
-            this.keys = keys;
-            this.values = values;
-        }
-
-        public SerializedDictionary(Dictionary<TKey, TValue> dictionary)
-        {
-            ReadDictionary(dictionary);
+            Clear();
+            AddRange(range);
         }
         
-        #region IContainerBase and IContainer Implementation
+         #region IContainerBase and IContainer Implementation
         
         /// <summary>
         /// The type of the stored value
         /// </summary>
-        public override Type ContainerType => typeof(SerializedDictionary<TKey, TValue>);
+        public override Type ContainerType => typeof(List<T>);
 
         /// <summary>
         /// Retrieve all the contained element
@@ -127,34 +81,16 @@ namespace CippSharp.Core.Containers
             return ToDictionary();
         }
         
-        /// <summary>
-        /// Retrieve first of the two elements
-        /// </summary>
-        /// <returns></returns>
-        public virtual List<TKey> GetKey()
+        public List<T> GetValue()
         {
-            return keys;
+            return value;
         }
         
-        /// <summary>
-        /// Retrieve second of the two elements
-        /// </summary>
-        /// <returns></returns>
-        public virtual List<TValue> GetValue()
+        public List<T> GetPairs()
         {
-            return values;
+            return value;
         }
-
-
-        /// <summary>
-        /// Retrieve <see cref="Items"/>
-        /// </summary>
-        /// <returns></returns>
-        object[] IContainer<object[]>.GetValue()
-        {
-            return Items;
-        }
-
+        
         /// <summary>
         /// Read/Write on data/value
         /// </summary>
@@ -172,29 +108,9 @@ namespace CippSharp.Core.Containers
         /// <param name="access"></param>
         public virtual void Access(AccessDelegate<object> access)
         {
-            object o = Items;
+            object o = ToDictionary(value);
             access.Invoke(ref o);
-            Items = (object[])o;
-        }
-       
-        /// <summary>
-        /// Read/Write on data/value
-        /// </summary>
-        /// <param name="access"></param>
-        public virtual void Access(AccessDelegate<object[]> access)
-        {
-            object[] o = Items;
-            access.Invoke(ref o);
-            Items = o;
-        }
-        
-        /// <summary>
-        /// Read/Write on data/value
-        /// </summary>
-        /// <param name="access"></param>
-        public virtual void Access(AccessDelegate<List<TKey>, List<TValue>> access)
-        {
-            access.Invoke(ref keys, ref values);
+            ReadDictionary((Dictionary<TKey, TValue>)o);
         }
 
         /// <summary>
@@ -215,38 +131,13 @@ namespace CippSharp.Core.Containers
         /// <param name="access"></param>
         public virtual bool Check(PredicateAccessDelegate<object> access)
         {
-            object o = Items;
+            object o = ToDictionary();
             bool check = access.Invoke(ref o);
-            Items = (object[])o;
+            ReadDictionary((Dictionary<TKey, TValue>)o);
             return check;
         }
         
-        /// <summary>
-        /// Predicate on data/value
-        /// </summary>
-        /// <param name="access"></param>
-        public virtual bool Check(PredicateAccessDelegate<object[]> access)
-        {
-            object[] o = Items;
-            bool check = access.Invoke(ref o);
-            Items = o;
-            return check;
-        }
-        
-        /// <summary>
-        /// Predicate on data/value
-        /// </summary>
-        /// <param name="access"></param>
-        public virtual bool Check(PredicateAccessDelegate<List<TKey>, List<TValue>> access)
-        {
-            return access.Invoke(ref keys, ref values);
-        }
-
-        object IContainer<object>.GetValue()
-        {
-            return GetValue();
-        }
-
+       
         public override void Set(object newValue)
         {
             switch (newValue)
@@ -254,35 +145,11 @@ namespace CippSharp.Core.Containers
                 case Dictionary<TKey, TValue> dictionary:
                     ReadDictionary(dictionary);
                     break;
-                case object[] newItems:
-                    Items = newItems;
-                    break;
             }
-        }
-        
-        public virtual void Set(object[] newItems)
-        {
-            Items = newItems;
-        }
-        
-        public virtual void Set(List<TKey> newKeys, List<TValue> newValues)
-        {
-            this.keys = newKeys;
-            this.values = newValues;
-        }
-
-        public virtual void SetKey(List<TKey> newKeys)
-        {
-            this.keys = newKeys;
-        }
-
-        public virtual void SetValue(List<TValue> newValues)
-        {
-            this.values = newValues;
         }
 
         #endregion
-
+        
         #region ICollectionContainer and IDictionaryContainer Implementation
 
         /// <summary>
@@ -298,7 +165,12 @@ namespace CippSharp.Core.Containers
         /// <param name="index"></param>
         public virtual KeyValuePair<TKey, TValue> this[int index]
         {
-            get => new KeyValuePair<TKey, TValue>(keys[index], values[index]);
+            get
+            {
+                T pair = value[index];
+                return new KeyValuePair<TKey, TValue>(pair.Key, pair.Value); 
+                
+            }
             set => this[value.Key] = value.Value;
         }
         
@@ -310,21 +182,27 @@ namespace CippSharp.Core.Containers
         {
             get
             {
-                int index = keys.IndexOf(key);
-                return values[index];
+                int index = IndexOf(value, key);
+                return value[index].Value;
             }
             set
             {
-                int index = keys.IndexOf(key);
+                int index = IndexOf(this.value, key);
                 //if that is not contained... add a new element as in real c# dictionaries 
-                if (!ArrayUtils.IsValidIndex(index, values))
+                if (!ArrayUtils.IsValidIndex(index, this.value))
                 {
-                    keys.Add(key);
-                    values.Add(value);
+                    try
+                    {
+                        this.value.Add((T)new KeyValuePair<TKey, TValue>(key, value));
+                    }
+                    catch (Exception e)
+                    {
+                        Debug.LogError($"{TActivatorFailedMessage}. Exception {e.Message}.");
+                    }
                 }
                 else
                 {
-                    values[index] = value;
+                    this.value[index].SetValue(value);
                 }
             }
         }
@@ -332,12 +210,11 @@ namespace CippSharp.Core.Containers
         /// <summary>
         /// Count of elements in this collection
         /// </summary>
-        public virtual int Count => keys?.Count ?? 0;
+        public virtual int Count => this.value?.Count ?? 0;
 
         public override void Clear()
         {
-            keys.Clear();
-            values.Clear();
+            value.Clear();
         }
 
         /// <summary>
@@ -377,6 +254,18 @@ namespace CippSharp.Core.Containers
         /// WARNING: you cannot add an element with same key.
         /// </summary>
         /// <param name="element"></param>
+        public void Add(T element)
+        {
+            if (!TryAdd(element))
+            {
+                Debug.LogWarning(DictionariesKeyAlreadyPresentWarning);
+            }
+        }
+        
+        /// <summary>
+        /// WARNING: you cannot add an element with same key.
+        /// </summary>
+        /// <param name="element"></param>
         public virtual void Add(KeyValuePair<TKey, TValue> element)
         {
             if (!TryAdd(element))
@@ -389,6 +278,19 @@ namespace CippSharp.Core.Containers
         /// WARNING: you cannot add multiple elements with same key
         /// </summary>
         /// <param name="enumerable"></param>
+        public void AddRange(IEnumerable<T> enumerable)
+        {
+            T[] array = enumerable.ToArray();
+            foreach (var t in array)
+            {
+                TryAdd(t);
+            }
+        }
+        
+        /// <summary>
+        /// WARNING: you cannot add multiple elements with same key
+        /// </summary>
+        /// <param name="enumerable"></param>
         public virtual void AddRange(IEnumerable<KeyValuePair<TKey, TValue>> enumerable)
         {
             KeyValuePair<TKey, TValue>[] array = enumerable.ToArray();
@@ -397,7 +299,7 @@ namespace CippSharp.Core.Containers
                 TryAdd(t);
             }
         }
-
+       
         /// <summary>
         /// Tries to add an element to dictionary
         /// </summary>
@@ -406,14 +308,20 @@ namespace CippSharp.Core.Containers
         private bool TryAdd(KeyValuePair<TKey, TValue> element)
         {
             TKey tmpKey = element.Key;
-            if (keys.Contains(tmpKey))
+            if (Contains(value, tmpKey))
             {
-               
                 return false;
             }
 
-            keys.Add(element.Key);
-            values.Add(element.Value);
+            try
+            {
+                this.value.Add((T)new KeyValuePair<TKey, TValue>(tmpKey, element.Value));
+            }
+            catch (Exception e)
+            {
+                Debug.LogError($"{TActivatorFailedMessage}. Exception {e.Message}.");
+            }
+            
             return true;
         }
         
@@ -439,8 +347,7 @@ namespace CippSharp.Core.Containers
             int index = ArrayUtils.IndexOf(array, element);
             if (ArrayUtils.IsValidIndex(index, array))
             {
-                keys.RemoveAt(index);
-                values.RemoveAt(index);
+                value.RemoveAt(index);
                 return true;
             }
             else
@@ -454,24 +361,38 @@ namespace CippSharp.Core.Containers
             int length = Count;
             if (index >= 0 && index < length)
             {
-                keys.RemoveAt(index);
-                values.RemoveAt(index);
+                value.RemoveAt(index);
             }
         }
 
         public virtual KeyValuePair<TKey, TValue>[] ToArray()
         {
-            return ArrayUtils.ToArray(keys, values);
+            return value.Select(t => (KeyValuePair<TKey, TValue>)t).ToArray();
         }
 
         public override bool IsNullOrEmpty()
         {
-            return ArrayUtils.IsNullOrEmpty(keys);
+            return ArrayUtils.IsNullOrEmpty(value);
         }
         
         ICollection<KeyValuePair<TKey, TValue>> IContainer<ICollection<KeyValuePair<TKey, TValue>>>.GetValue()
         {
             return ToDictionary();
+        }
+
+        public void Access(AccessDelegate<List<T>> access)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool Check(PredicateAccessDelegate<List<T>> access)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Set(List<T> newValue)
+        {
+            throw new NotImplementedException();
         }
 
         public virtual IEnumerator<KeyValuePair<TKey, TValue>> GetEnumerator()
@@ -486,13 +407,14 @@ namespace CippSharp.Core.Containers
         
         #endregion
         
+       
         /// <summary>
         /// This is Dictionary!
         /// </summary>
         /// <returns></returns>
         public virtual Dictionary<TKey, TValue> ToDictionary()
         {
-            return ArrayUtils.ToDictionary(keys, values);
+            return ToDictionary(value);
         }
 
         /// <summary>
@@ -515,15 +437,6 @@ namespace CippSharp.Core.Containers
             AddRange(dictionary);
         }
       
-        /// <summary>
-        /// This as KeyValuePair
-        /// </summary>
-        /// <returns></returns>
-        public KeyValuePair<List<TKey>, List<TValue>> ToKeyValuePair()
-        {
-            return this;
-        }
-
         #region ISerializationCallbackReceiver Implementation
 
         public virtual void OnBeforeSerialize()
@@ -541,9 +454,9 @@ namespace CippSharp.Core.Containers
 #if UNITY_EDITOR
         private void DelayedUpdate()
         {
-            if (ArrayUtils.HasDuplicates(keys))
+            if (ArrayUtils.HasDuplicates(value.Select(t => t.Key)))
             {
-                messages = "WARNING: you keys are containing a duplicate. This is not allowed in dictionaries.";
+                messages = DictionariesDuplicatesWarning;
             }
             else
             {
@@ -558,18 +471,67 @@ namespace CippSharp.Core.Containers
 
         #endregion
 
+        
         #region Operators
 
-        public static implicit operator KeyValuePair<List<TKey>, List<TValue>>(SerializedDictionary<TKey, TValue> pair)
-        {
-            return new KeyValuePair<List<TKey>, List<TValue>>(pair.Key, pair.Value);
-        }
-        
-        public static implicit operator SerializedDictionary<TKey, TValue>(KeyValuePair<TKey, TValue> pair)
-        {
-            return new SerializedDictionary<TKey, TValue>();
-        }
+//        public static implicit operator ListContainer<T>(SerializedDictionary<T, Key, Value> serializedDictionary)
+//        {
+//            return serializedDictionary.list;
+//        }
 
         #endregion
+
+
+        /// <summary>
+        /// Contains the key element?
+        /// </summary>
+        /// <param name="list"></param>
+        /// <param name="element"></param>
+        /// <returns></returns>
+        protected static bool Contains(List<T> list, TKey element)
+        {
+            return IndexOf(list, element) >= 0;
+        }
+        
+        /// <summary>
+        /// Index of key element
+        /// </summary>
+        /// <param name="list"></param>
+        /// <param name="element"></param>
+        /// <returns></returns>
+        protected static int IndexOf(List<T> list, TKey element)
+        {
+            for (int i = 0; i < list.Count; i++)
+            {
+                T pair = list[i];
+                if ((object)pair.Key == (object)element)
+                {
+                    return i;
+                }
+            }
+
+            return -1;
+        }
+
+        /// <summary>
+        /// Warning:
+        /// - keys and values MUST have the same length
+        /// - keys MUST NOT have duplicates
+        /// </summary>
+        /// <param name="list"></param>
+        /// <typeparam name="TKey"></typeparam>
+        /// <typeparam name="TValue"></typeparam>
+        /// <returns></returns>
+        protected static Dictionary<TKey, TValue> ToDictionary(List<T> list)
+        {
+            Dictionary<TKey, TValue> newDictionary = new Dictionary<TKey, TValue>();
+            foreach (var element in list)
+            {
+                newDictionary[element.Key] = element.Value;
+            }
+            return newDictionary;
+        }
+
+     
     }
 }

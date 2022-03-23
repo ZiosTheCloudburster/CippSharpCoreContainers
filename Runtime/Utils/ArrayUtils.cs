@@ -1,7 +1,7 @@
-﻿
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+
 namespace CippSharp.Core.Containers
 {
     using Array = System.Array;
@@ -15,7 +15,9 @@ namespace CippSharp.Core.Containers
         /// <summary>
         /// From list of Keys and Values to Dictionary
         /// 
-        /// Warning: keys and values MUST have the same length
+        /// Warning:
+        /// - keys and values MUST have the same length
+        /// - keys MUST NOT have duplicates
         /// </summary>
         /// <param name="keys"></param>
         /// <param name="values"></param>
@@ -248,8 +250,6 @@ namespace CippSharp.Core.Containers
         }
         
         #endregion
-
-        
         
 //        #region Index Of
 //
@@ -279,16 +279,28 @@ namespace CippSharp.Core.Containers
 
         #region Has Duplicates
 
+//        /// <summary>
+//        /// Has Duplicates?
+//        /// </summary>
+//        /// <param name="list"></param>
+//        /// <typeparam name="T"></typeparam>
+//        /// <returns></returns>
+//        public static bool HasDuplicates<T>(List<T> list) 
+//        {
+//            HashSet<T> hs = new HashSet<T>();
+//            return list.Any(t => !hs.Add(t));
+//        }
+        
         /// <summary>
         /// Has Duplicates?
         /// </summary>
-        /// <param name="list"></param>
+        /// <param name="enumerable"></param>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        public static bool HasDuplicates<T>(List<T> list) 
+        public static bool HasDuplicates<T>(IEnumerable<T> enumerable) 
         {
             HashSet<T> hs = new HashSet<T>();
-            return list.Any(t => !hs.Add(t));
+            return enumerable.Any(t => !hs.Add(t));
         }
 
         #endregion
