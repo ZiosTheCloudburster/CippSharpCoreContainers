@@ -23,7 +23,7 @@ namespace CippSharp.Core.Containers
     /// <typeparam name="TKey"></typeparam>
     /// <typeparam name="TValue"></typeparam>
     [Serializable]
-    public abstract class SerializedDictionary<T, TKey, TValue> : SerializedDictionaryBase, IContainer<List<T>>,
+    public abstract class SerializedDictionary<T, TKey, TValue> : SerializedDictionaryBase, IContainer<object>, IContainer<List<T>>,
          IDictionaryContainer<TKey, TValue>, ISerializationCallbackReceiver
         where T : SerializedKeyValuePair<TKey, TValue>
     {
@@ -39,7 +39,16 @@ namespace CippSharp.Core.Containers
         [FormerlySerializedAs("array")]
         [FormerlySerializedAs("corners")]
         [FormerlySerializedAs("value")]
-        [SerializeField] public List<T> value = new List<T>();
+        [SerializeField] protected List<T> value = new List<T>();
+        
+        /// <summary>
+        /// this has minus 'l' as old name reference
+        /// </summary>
+        public virtual List<T> list
+        {
+            get => this.value;
+            set => this.value = value;
+        }
 
 #if UNITY_EDITOR
         [SerializeField, NotEditable] private string messages = string.Empty;
@@ -91,6 +100,11 @@ namespace CippSharp.Core.Containers
             return value;
         }
         
+        object IContainer<object>.GetValue()
+        {
+            return GetValue();
+        }
+        
         /// <summary>
         /// Read/Write on data/value
         /// </summary>
@@ -101,7 +115,7 @@ namespace CippSharp.Core.Containers
             access.Invoke(ref o);
             ReadDictionary((Dictionary<TKey, TValue>)o);
         }
-        
+
         /// <summary>
         /// Read/Write on data/value
         /// </summary>
@@ -212,6 +226,9 @@ namespace CippSharp.Core.Containers
         /// </summary>
         public virtual int Count => this.value?.Count ?? 0;
 
+        /// <summary>
+        /// Clear
+        /// </summary>
         public override void Clear()
         {
             value.Clear();
@@ -229,6 +246,15 @@ namespace CippSharp.Core.Containers
         }
 
         /// <summary>
+        /// Access the collection of key value pairs
+        /// </summary>
+        /// <param name="access"></param>
+        public virtual void Access(AccessDelegate<List<T>> access)
+        {
+            access.Invoke(ref value);
+        }
+        
+        /// <summary>
         /// Check the collection of key value pairs
         /// </summary>
         /// <param name="access"></param>
@@ -240,6 +266,11 @@ namespace CippSharp.Core.Containers
             ReadCollection(c);
             return check;
         }
+        
+        public virtual bool Check(PredicateAccessDelegate<List<T>> access)
+        {
+            return access.Invoke(ref value);
+        }
 
         /// <summary>
         /// Set a new collection
@@ -248,6 +279,12 @@ namespace CippSharp.Core.Containers
         public virtual void Set(ICollection<KeyValuePair<TKey, TValue>> newValue)
         {
             ReadCollection(newValue);
+        }
+        
+        public virtual void Set(List<T> newValue)
+        {
+            Clear();
+            AddRange(newValue);
         }
         
         /// <summary>
@@ -378,21 +415,6 @@ namespace CippSharp.Core.Containers
         ICollection<KeyValuePair<TKey, TValue>> IContainer<ICollection<KeyValuePair<TKey, TValue>>>.GetValue()
         {
             return ToDictionary();
-        }
-
-        public void Access(AccessDelegate<List<T>> access)
-        {
-            throw new NotImplementedException();
-        }
-
-        public bool Check(PredicateAccessDelegate<List<T>> access)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Set(List<T> newValue)
-        {
-            throw new NotImplementedException();
         }
 
         public virtual IEnumerator<KeyValuePair<TKey, TValue>> GetEnumerator()

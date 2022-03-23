@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace CippSharp.Core.Containers.Samples
 {
-    public class SerializedPairsSamples : MonoBehaviour
+    internal class SerializedPairsSamples : MonoBehaviour
     {
         public string message = "See what happens during runtime.";
         
