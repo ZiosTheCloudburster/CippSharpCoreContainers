@@ -1,0 +1,13 @@
+﻿using System;
+using UnityEngine;
+
+namespace CippSharp.Core.Containers
+{
+    /// <summary>
+    /// Purpose: abstract class for resolvers.
+    /// </summary>
+    public abstract class AResolverAssetBase : ADataAssetBase
+    {
+        
+    }
+}

@@ -10,13 +10,6 @@ namespace CippSharp.Core.Containers
     /// <typeparam name="T"></typeparam>
     public abstract class ADataAsset<T> : ADataAssetBase, IContainer<T>
     {
-//        /// <summary>
-//        /// To access stored data.
-//        /// </summary>
-//        /// <param name="data"></param>
-//        public delegate void AccessDelegate(ref T data);
-//        public delegate bool PredicateAccessDelegate(ref T data);
-//        
         /// <summary>
         /// The stored data
         /// </summary>
@@ -115,61 +108,6 @@ namespace CippSharp.Core.Containers
         }
 
         #endregion
-        
-        
-//        /// <summary>
-//        /// Get Data
-//        /// </summary>
-//        public T Get ()
-//        {
-//            return m_data;
-//        }
-//
-//        /// <summary>
-//        /// Set Data
-//        /// </summary>
-//        /// <param name="newData"></param>
-//        public void Set(T newData)
-//        {
-//            m_data = newData;
-//        }
-//
-//        /// <summary>
-//        /// Custom edit of data
-//        /// </summary>
-//        /// <param name="access"></param>
-//        public void Access(AccessDelegate access)
-//        {
-//            access.Invoke(ref m_data);
-//        }
-//
-//        /// <summary>
-//        /// Access to verify a predicate on data
-//        /// </summary>
-//        /// <param name="access">mustn't be null</param>
-//        /// <returns></returns>
-//        public bool Check(PredicateAccessDelegate access)
-//        {
-//            return access.Invoke(ref m_data);
-//        }
-//        
-//        /// <summary>
-//        /// Custom edit of data
-//        /// </summary>
-//        /// <param name="edit"></param>
-//        public void Edit(AccessDelegate edit)
-//        {
-//            Access(edit);
-//        }
-//        
-//        /// <summary>
-//        /// 'Cast' to Data
-//        /// </summary>
-//        /// <returns></returns>
-//        public K To<K>()
-//        {
-//            return CastUtils.To<K>(m_data);
-//        }
         
         /// <summary>
         /// Custom edit of data

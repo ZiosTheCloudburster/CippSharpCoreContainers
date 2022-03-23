@@ -14,22 +14,6 @@ namespace CippSharp.Core.Containers
     {
         #region Custom Editor
 #if UNITY_EDITOR
-//        [CustomPropertyDrawer(typeof(NotEditableAttribute), true)]
-//        public class NotEditableDrawer : DecoratorDrawer
-//        {
-//            public override float GetHeight()
-//            {
-//                return 0;
-//            }
-//
-//            public override void OnGUI(Rect position)
-//            {
-//                bool guiStatus = GUI.enabled;
-//                GUI.enabled = false;
-//                base.OnGUI(position);
-//            }
-//        }
-        
         [CustomPropertyDrawer(typeof(NotEditableAttribute))]
         internal class NotEditableDrawer : PropertyDrawer
         {

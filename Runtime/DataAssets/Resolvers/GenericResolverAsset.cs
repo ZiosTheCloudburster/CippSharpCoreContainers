@@ -1,7 +1,7 @@
 ﻿
-namespace CippSharp.Core
+namespace CippSharp.Core.Containers
 {
-    public abstract class GenericResolverAsset : ResolverAsset<object>
+    public abstract class GenericResolverAsset : AResolverAsset<object>
     {
         
     }
