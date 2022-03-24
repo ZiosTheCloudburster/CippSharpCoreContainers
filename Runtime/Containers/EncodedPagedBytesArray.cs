@@ -73,7 +73,7 @@ namespace CippSharp.Core.Containers
                     r.height = EditorGUI.GetPropertyHeight(encodedProperty);
                     EditorGUI.PropertyField(r, encodedProperty);
                     r.y += r.height + EditorGUIUtils.VerticalSpacing;
-                    height += r.height + EditorGUIUtils.VerticalSpacing;
+                    h += r.height + EditorGUIUtils.VerticalSpacing;
                     GUI.enabled = true;
                     EditorGUI.indentLevel--;
                 }

@@ -35,7 +35,6 @@ namespace CippSharp.Core.Containers
         /// The index of the collection <see cref="value"/> from where to draw the elements
         /// </summary>
         [SerializeField, HideInInspector] private int pageIndex = 0;
-//        [SerializeField, HideInInspector] private int pageIndex = 0;
 
         /// <summary>
         /// Retrieve the current page index
@@ -83,30 +82,28 @@ namespace CippSharp.Core.Containers
         /// <param name="newPageIndex"></param>
         public void SetPageIndex(int newPageIndex)
         {
-            if (pageIndex == newPageIndex)
-            {
-                return;
-            }
-#if UNITY_EDITOR
-            inspectedElements = GetInspectedElementsAt(newPageIndex);
-#else
-            pageIndex = newPageIndex;
-#endif
 #if UNITY_EDITOR            
             OnSetPageIndex(newPageIndex, inspectedElements);
+#else
+            pageIndex = newPageIndex;
 #endif
         }
         
 #if UNITY_EDITOR
         /// <summary>
         /// Children classes can do things here.
-        /// Its not called or compiled outside editor!
+        /// It's not called or compiled outside editor!
         /// </summary>
         /// <param name="newPageIndex"></param>
         /// <param name="elements"></param>
         protected virtual void OnSetPageIndex(int newPageIndex, T[] elements)
         {
+            if (pageIndex == newPageIndex)
+            {
+                return;
+            }
             
+            inspectedElements = GetInspectedElementsAt(newPageIndex);
         }
 #endif
         #endregion
@@ -135,10 +132,19 @@ namespace CippSharp.Core.Containers
             }
 
             pageIndex = newPageIndex;
-            int index = pageIndex * elementsPerPage;
-            int length = value.Count;
-            int clampedElementsPerPagePage = pageIndex + elementsPerPage < length ? elementsPerPage : Mathf.Clamp(length - index, 0, elementsPerPage);
-            T[] array = ArrayUtils.SubArrayOrDefault(value, pageIndex, clampedElementsPerPagePage);
+            int arrayIndex = pageIndex * elementsPerPage;
+            int maxArrayLength = PagesCount * elementsPerPage;
+            int effectiveLength = value.Count;
+            int clampedElementsPerPage;
+            if (arrayIndex < effectiveLength)
+            {
+                clampedElementsPerPage = elementsPerPage;
+            }
+            else
+            {
+                clampedElementsPerPage = Mathf.Clamp(elementsPerPage, 0, maxArrayLength - effectiveLength);
+            }
+            T[] array = ArrayUtils.SubArrayOrDefault(value, arrayIndex, clampedElementsPerPage);
             
             return array;
         }
