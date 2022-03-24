@@ -4,8 +4,6 @@ using System.Linq;
 
 namespace CippSharp.Core.Containers
 {
-    using Array = System.Array;
-    using Exception = System.Exception;
     using Debug = UnityEngine.Debug;
     
     internal static class ArrayUtils
@@ -58,51 +56,6 @@ namespace CippSharp.Core.Containers
             return newArray;
         }
         
-        public static void SplitEnumerable<TKey, TValue>(IEnumerable<KeyValuePair<TKey, TValue>> enumerable, out List<TKey> keys, out List<TValue> values)
-        {
-            KeyValuePair<TKey, TValue>[] array = enumerable.ToArray();
-            SplitArray(array, out keys, out values);
-        }
-
-        public static void SplitCollection<TKey, TValue>(ICollection<KeyValuePair<TKey, TValue>> collection, out List<TKey> keys, out List<TValue> values)
-        {
-            KeyValuePair<TKey, TValue>[] array = collection.ToArray();
-            SplitArray(array, out keys, out values);
-        }
-        
-        /// <summary>
-        /// From Dictionary to list of Keys and Values
-        /// </summary>
-        /// <param name="dictionary"></param>
-        /// <param name="keys"></param>
-        /// <param name="values"></param>
-        /// <typeparam name="TKey"></typeparam>
-        /// <typeparam name="TValue"></typeparam>
-        public static void SplitDictionary<TKey, TValue>(Dictionary<TKey, TValue> dictionary, out List<TKey> keys, out List<TValue> values)
-        {
-            KeyValuePair<TKey, TValue>[] array = dictionary.ToArray();
-            SplitArray(array, out keys, out values);
-        }
-
-        /// <summary>
-        /// From KeyValuePairsArray
-        /// </summary>
-        /// <param name="pairs"></param>
-        /// <param name="keys"></param>
-        /// <param name="values"></param>
-        /// <typeparam name="TKey"></typeparam>
-        /// <typeparam name="TValue"></typeparam>
-        public static void SplitArray<TKey, TValue>(KeyValuePair<TKey, TValue>[] pairs, out List<TKey> keys, out List<TValue> values)
-        {
-            keys = new List<TKey>();
-            values = new List<TValue>();
-            foreach (var pair in pairs)
-            {
-                keys.Add(pair.Key);
-                values.Add(pair.Value);
-            }
-        }
-
         #endregion
         
         #region Generic
@@ -133,7 +86,7 @@ namespace CippSharp.Core.Containers
             }
             catch (Exception e)
             {
-                Debug.LogError(e.Message);
+                Debug.LogError($"Failed to get element from array at index. Caught Exception: {e.Message}");
                 element = null;
                 return false;
             }
@@ -175,34 +128,12 @@ namespace CippSharp.Core.Containers
             }
             catch (Exception e)
             {
-                Debug.LogError(e.Message);
+                Debug.LogError($"Failed to cast object to object[]. Caught Exception: {e.Message}");
                 array = null;
                 return false;
             }
         }
         
-        /// <summary>
-        /// Try to cast a generic Array to object[]
-        /// </summary>
-        /// <param name="value"></param>
-        /// <param name="array"></param>
-        /// <returns>success</returns>
-        public static bool TryCast(Array value, out object[] array)
-        {
-            try
-            {
-                array = (value).Cast<object>().ToArray();
-                return true;
-            }
-            catch (Exception e)
-            {
-                Debug.LogError(e.Message);
-                array = null;
-                return false;
-            }
-        }
-        
-
         #endregion
         
         #region Find
@@ -235,18 +166,6 @@ namespace CippSharp.Core.Containers
         #endregion
         
         #region Has Duplicates
-
-//        /// <summary>
-//        /// Has Duplicates?
-//        /// </summary>
-//        /// <param name="list"></param>
-//        /// <typeparam name="T"></typeparam>
-//        /// <returns></returns>
-//        public static bool HasDuplicates<T>(List<T> list) 
-//        {
-//            HashSet<T> hs = new HashSet<T>();
-//            return list.Any(t => !hs.Add(t));
-//        }
         
         /// <summary>
         /// Has Duplicates?
@@ -280,40 +199,6 @@ namespace CippSharp.Core.Containers
         
         
         #region Is Null or Empty
-        
-//        /// <summary>
-//        /// Returns true if the given array is null or empty
-//        /// </summary>
-//        /// <param name="array"></param>
-//        /// <typeparam name="T"></typeparam>
-//        /// <returns></returns>
-//        public static bool IsNullOrEmpty<T>(T[] array)
-//        {
-//            return array == null || array.Length < 1;
-//        }
-//        
-//        /// <summary>
-//        /// Returns true if the given list is null or empty
-//        /// </summary>
-//        /// <param name="list"></param>
-//        /// <typeparam name="T"></typeparam>
-//        /// <returns></returns>
-//        public static bool IsNullOrEmpty<T>(List<T> list)
-//        {
-//            return list == null || list.Count < 1;
-//        }
-
-        /// <summary>
-        /// Returns true if the given dictionary is null or empty
-        /// </summary>
-        /// <param name="dictionary"></param>
-        /// <typeparam name="K"></typeparam>
-        /// <typeparam name="V"></typeparam>
-        /// <returns></returns>
-        public static bool IsNullOrEmpty<K, V>(Dictionary<K, V> dictionary)
-        {
-            return dictionary == null || dictionary.Count < 1;
-        }
 
         /// <summary>
         /// Returns true if the given collection is null or empty
@@ -325,46 +210,11 @@ namespace CippSharp.Core.Containers
         {
             return collection == null || collection.Count < 1;
         }
-        
-//        /// <summary>
-//        /// Returns true if the given enumerable is null or empty
-//        /// </summary>
-//        /// <param name="enumerable"></param>
-//        /// <typeparam name="T"></typeparam>
-//        /// <returns></returns>
-//        public static bool IsNullOrEmpty<T>(IEnumerable<T> enumerable)
-//        {
-//            return enumerable == null || !enumerable.Any();
-//        }
 
         #endregion
         
         #region Is Valid Index
-//
-//        /// <summary>
-//        /// Returns true if the given index is the array range.
-//        /// </summary>
-//        /// <param name="index"></param>
-//        /// <param name="array"></param>
-//        /// <typeparam name="T"></typeparam>
-//        /// <returns></returns>
-//        public static bool IsValidIndex<T>(int index, T[] array)
-//        {
-//            return index >= 0 && index < array.Length;
-//        }
-//        
-//        /// <summary>
-//        /// Returns true if the given index is in the list range.
-//        /// </summary>
-//        /// <param name="index"></param>
-//        /// <param name="list"></param>
-//        /// <typeparam name="T"></typeparam>
-//        /// <returns></returns>
-//        public static bool IsValidIndex<T>(int index, List<T> list)
-//        {
-//            return index >= 0 && index < list.Count;
-//        }
-//
+        
         /// <summary>
         /// Returns true if the given index is in the list range.
         /// </summary>
@@ -377,20 +227,7 @@ namespace CippSharp.Core.Containers
             return index >= 0 && index < collection.Count;
         }
         
-//        /// <summary>
-//        /// Returns true if the given index is in the list range.
-//        /// </summary>
-//        /// <param name="index"></param>
-//        /// <param name="enumerable"></param>
-//        /// <typeparam name="T"></typeparam>
-//        /// <returns></returns>
-//        public static bool IsValidIndex<T>(int index, IEnumerable<T> enumerable)
-//        {
-//            return index >= 0 && index < enumerable.Count();
-//        }
-        
         #endregion
-        
         
         #region Remove
 
@@ -443,7 +280,7 @@ namespace CippSharp.Core.Containers
             }
             catch (Exception e)
             {
-                Debug.LogError($"Failed to retrieve subArray. Exception: {e.Message}.");
+                Debug.LogError($"Failed to retrieve subArray. Caught Exception: {e.Message}.");
                 subArray = null;
                 return false;
             }

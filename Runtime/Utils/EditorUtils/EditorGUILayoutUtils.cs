@@ -10,17 +10,13 @@ using Object = UnityEngine.Object;
 
 namespace CippSharp.Core.Containers
 {
-	public static partial class EditorGUILayoutUtils
+	internal static class EditorGUILayoutUtils
 	{
 		public const string inspectorModePropertyName = "inspectorMode";
 		public const string instanceIdLabelValue = "Instance ID";
 		public const string identfierLabelValue = "Local Identfier in File";
 		public const string selfLabelValue = "Self";
-		public const string k_BackingField = SerializedPropertyUtils.k_BackingField;
 
-		private const string PropertyIsNotArrayError = "Property isn't an array.";
-		private const string PropertyIsNotValidArrayWarning = "Property isn't a valid array.";
-		
 		#region Get Local Identfier In File
 		
 		/// <summary>
@@ -110,7 +106,7 @@ namespace CippSharp.Core.Containers
 		
 		#endregion
 		
-		  #region Draw Button
+		#region Draw Button
 
 	    /// <summary>
 	    /// Draws a minibutton that calls, if pressed, the action.
