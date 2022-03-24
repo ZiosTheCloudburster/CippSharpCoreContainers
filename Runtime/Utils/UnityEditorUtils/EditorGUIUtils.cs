@@ -2,13 +2,12 @@
 // Author: Alessandro Salani (Cippo)
 //
 #if UNITY_EDITOR
-using System.Reflection;
 using UnityEditor;
 using UnityEngine;
 
 namespace CippSharp.Core.Containers
 {
-    public static partial class EditorGUIUtils
+    internal static class EditorGUIUtils
     {
         /// <summary>
         /// Wrap of unity's default single line height.
@@ -25,11 +24,7 @@ namespace CippSharp.Core.Containers
         /// </summary>
         public static readonly float LineHeight = SingleLineHeight + VerticalSpacing;
 
-        
-//        //Reflection
-//        private const BindingFlags flags = BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Static | BindingFlags.FlattenHierarchy; 
-        
-      #region Draw Property
+        #region Draw Property
         
         /// <summary>
         /// It draws the property only if it is different from null.
