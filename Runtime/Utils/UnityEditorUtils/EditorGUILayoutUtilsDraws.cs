@@ -403,7 +403,7 @@ namespace CippSharp.Core.Containers
 			
 			bool enabled = GUI.enabled;
 			GUI.enabled = false;
-			SerializedProperty m_Script = serializedObject.FindProperty(Constants.ScriptSerializedPropertyName);
+			SerializedProperty m_Script = serializedObject.FindProperty(EditorConstants.ScriptSerializedPropertyName);
 			if (m_Script != null)
 			{
 				EditorGUILayout.PropertyField(m_Script, m_Script.isExpanded && m_Script.hasChildren);
@@ -435,7 +435,7 @@ namespace CippSharp.Core.Containers
 	    {
 		    bool enabled = GUI.enabled;
 		    GUI.enabled = false;
-		    SerializedProperty m_Script = new SerializedObject(customEditor).FindProperty(Constants.ScriptSerializedPropertyName);
+		    SerializedProperty m_Script = new SerializedObject(customEditor).FindProperty(EditorConstants.ScriptSerializedPropertyName);
 		    EditorGUILayout.PropertyField(m_Script, new GUIContent(nameof(Editor)), m_Script.hasChildren);
 		    GUI.enabled = enabled;
 	    }

@@ -107,7 +107,7 @@ namespace CippSharp.Core.Containers
                         Debug.Log($"{i.ToString()} --> {fieldName}");
                     }
                 }
-                else if (fieldName == Constants.Array && i + 1 < splitResults.Length && splitResults[i + 1].Contains("data"))
+                else if (fieldName == EditorConstants.Array && i + 1 < splitResults.Length && splitResults[i + 1].Contains("data"))
                 {
                     #region Array Element Property
                         
@@ -230,7 +230,7 @@ namespace CippSharp.Core.Containers
 
                         //Do Nothing
                     }
-                    else if (fieldName == Constants.Array && i + 1 < splitResults.Length && splitResults[i + 1].Contains("data"))
+                    else if (fieldName == EditorConstants.Array && i + 1 < splitResults.Length && splitResults[i + 1].Contains("data"))
                     {
                         #region Array Element Property
                         
@@ -326,12 +326,12 @@ namespace CippSharp.Core.Containers
 					            Debug.Log($"Reverse loop {i.ToString()} --> {fieldName}");
 				            }
 			            }
-			            else if (fieldName.Contains(Constants.Array) && fieldName.Contains("data"))
+			            else if (fieldName.Contains(EditorConstants.Array) && fieldName.Contains("data"))
 			            {
 				            #region Array Element Property
 
 				            string data = fieldName;
-				            string parsingString = data.Replace(Constants.Array, string.Empty)
+				            string parsingString = data.Replace(EditorConstants.Array, string.Empty)
 					            .Replace(".", string.Empty).Replace("data[", string.Empty).Replace("]", string.Empty);
 				            if (int.TryParse(parsingString, out int w))
 				            {
