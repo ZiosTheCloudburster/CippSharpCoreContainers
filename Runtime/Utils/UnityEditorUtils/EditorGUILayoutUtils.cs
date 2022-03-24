@@ -54,44 +54,6 @@ namespace CippSharp.Core.Containers
 		}
 		
 		#endregion
-
-		#region Get Property Backing Field Name
-
-		/// <summary>
-		/// Retrieve property backing field name;
-		/// </summary>
-		/// <param name="originalPropertyName">of a property exposed with [field:]</param>
-		/// <returns></returns>
-		[Obsolete("2021/12/03 → Use SerializedPropertyUtils.GetPropertyBackingFieldName instead.")]
-		public static string GetPropertyBackingFieldName(string originalPropertyName)
-		{
-			return SerializedPropertyUtils.GetPropertyBackingFieldName(originalPropertyName);
-		}
-
-		/// <summary>
-		/// Retrieve property original name;
-		/// </summary>
-		/// <param name="backingFieldName">of a property exposed with [field:]</param>
-		/// <returns></returns>
-		[Obsolete("2021/12/03 → Use SerializedPropertyUtils.GetPropertyNameFromPropertyBackingFieldName instead.")]
-		public static string GetPropertyNameFromPropertyBackingFieldName(string backingFieldName)
-		{
-			return SerializedPropertyUtils.GetPropertyNameFromPropertyBackingFieldName(backingFieldName);
-		}
-		
-		#endregion
-	
-		/// <summary>
-		/// Draws an enum. It returns the int value of a property.
-		/// </summary>
-		/// <param name="displayedName"></param>
-		/// <param name="enum"></param>
-		/// <returns></returns>
-		[Obsolete("2021/08/14 → Use Draw Enum instead. This will be removed in future versions.")]
-		public static int DrawEnumField(string displayedName, Enum @enum)
-		{
-			return DrawEnum(ref displayedName, ref @enum);
-		}
 	}
 }
 #endif
