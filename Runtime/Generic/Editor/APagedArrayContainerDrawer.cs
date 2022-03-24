@@ -79,6 +79,7 @@ namespace CippSharpEditor.Core.Containers
                 if (EditorGUI.EndChangeCheck())
                 {
                     SerializedPropertyUtils.TryEditLastParentLevel(inspectedElementsProperty, SetPageIndex);
+                    EditorUtility.SetDirty(property.serializedObject.targetObject);
                 }
 
                 r.y += EditorGUIUtils.LineHeight;
