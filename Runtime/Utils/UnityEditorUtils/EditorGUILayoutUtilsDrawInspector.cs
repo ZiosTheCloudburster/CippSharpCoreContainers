@@ -1,19 +1,10 @@
 ﻿#if UNITY_EDITOR
-using System;
 using UnityEditor;
 
 namespace CippSharp.Core.Containers
 {
     public static partial class EditorGUILayoutUtils
     {
-        #region Draw Inspector
-
-        [Obsolete("2021/08/14 → Use DrawInspector instead. This will be removed in future versions.")]
-        public static bool DrawCascadeInspector(SerializedObject serializedObject, DrawSerializedPropertyDelegate drawPropertyDelegate)
-        {
-            return DrawInspector(serializedObject, drawPropertyDelegate);
-        }
-
         /// <summary>
         /// Foreach element (<see cref="SerializedProperty"/>) found in the <param name="serializedObject"></param> iterator,
         /// this will invoke a callback where you can override the draw of each or of some properties.
@@ -37,7 +28,6 @@ namespace CippSharp.Core.Containers
             return EditorGUI.EndChangeCheck();
         }
 
-        #endregion
     }
 }
 #endif
