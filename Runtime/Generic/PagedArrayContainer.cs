@@ -7,7 +7,9 @@ namespace CippSharp.Core.Containers
 {
     /// <summary>
     /// Purpose: make an inspector array of thousands elements more viewable
-    /// without affecting performances 
+    /// without affecting performances
+    ///
+    /// USAGE: it's intended just as 'viewer' not as editor of inspected elements
     /// </summary>
     /// <typeparam name="T"></typeparam>
     [Serializable]

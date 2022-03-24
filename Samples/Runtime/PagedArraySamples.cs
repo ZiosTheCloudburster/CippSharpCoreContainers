@@ -9,7 +9,20 @@ namespace CippSharp.Core.Containers.Samples
     public class PagedArraySamples : MonoBehaviour
     {
         [SerializeField] 
-        public EncodedPagedBytesArray encodedPagedBytesArray = new EncodedPagedBytesArray(new byte[464688]);
+        public EncodedPagedBytesArray encodedPagedBytesArray = new EncodedPagedBytesArray(GetRandomBytesArray(464688));
+
+        /// <summary>
+        /// Generates a random bytes array
+        /// </summary>
+        /// <param name="length"></param>
+        /// <returns></returns>
+        private static byte[] GetRandomBytesArray(int length)
+        {
+            byte[] newArray = new byte[length];
+            System.Random random = new System.Random();
+            random.NextBytes(newArray);
+            return newArray;
+        }
     }
 }
 #endif

@@ -49,7 +49,7 @@ namespace CippSharp.Core.Containers
             get
             {
                 int length = value.Count;
-                return Mathf.CeilToInt(length / (float)elementsPerPage);
+                return (Mathf.CeilToInt(length / (float)elementsPerPage));
             }
         }
 
@@ -133,17 +133,8 @@ namespace CippSharp.Core.Containers
 
             pageIndex = newPageIndex;
             int arrayIndex = pageIndex * elementsPerPage;
-            int maxArrayLength = PagesCount * elementsPerPage;
             int effectiveLength = value.Count;
-            int clampedElementsPerPage;
-            if (arrayIndex < effectiveLength)
-            {
-                clampedElementsPerPage = elementsPerPage;
-            }
-            else
-            {
-                clampedElementsPerPage = Mathf.Clamp(elementsPerPage, 0, maxArrayLength - effectiveLength);
-            }
+            int clampedElementsPerPage = arrayIndex + elementsPerPage < effectiveLength ? elementsPerPage : Mathf.Clamp(elementsPerPage, 0, effectiveLength - arrayIndex);
             T[] array = ArrayUtils.SubArrayOrDefault(value, arrayIndex, clampedElementsPerPage);
             
             return array;

@@ -31,13 +31,27 @@ namespace CippSharpEditor.Core.Containers
 
         public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
         {
+            h = EditorGUIUtils.LineHeight;
+            if (property.isExpanded)
+            {
+                h += r.height + EditorGUIUtils.VerticalSpacing * 2;
+                
+                h += EditorGUIUtils.LineHeight;
+                h += EditorGUIUtils.LineHeight;
+                h += EditorGUIUtils.LineHeight;
+                
+                inspectedElementsProperty = property.FindPropertyRelative(inspectedElementsName);
+                h += EditorGUIUtils.GetPropertyHeight(inspectedElementsProperty) + EditorGUIUtils.VerticalSpacing;
+                
+                h += EditorGUIUtils.LineHeight;
+            }
             return h;
         }
 
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
             r = position;
-            h = EditorGUIUtils.LineHeight;
+//            h = EditorGUIUtils.LineHeight;
             EditorGUIUtils.DrawFoldout(r, property, out r);
             if (property.isExpanded)
             {
@@ -60,16 +74,9 @@ namespace CippSharpEditor.Core.Containers
                 inspectedElementsProperty = property.FindPropertyRelative(inspectedElementsName);
                 
                 int arrayIndex = pageIndex * elementsPerPage;
-                pagesCount = Mathf.CeilToInt(length / (float) elementsPerPageProperty.intValue);
-                int maxArrayLength = pagesCount * elementsPerPage;
-                if (arrayIndex < length)
-                {
-                    clampedElementsPerPage = elementsPerPage;
-                }
-                else
-                {
-                    clampedElementsPerPage = Mathf.Clamp(elementsPerPage, 0, maxArrayLength - length);
-                }
+                //in this case pages count work as 'max reachable index'
+                pagesCount = (Mathf.CeilToInt(length / (float)elementsPerPage)) - 1;
+                clampedElementsPerPage = arrayIndex + elementsPerPage < length ? elementsPerPage : Mathf.Clamp(elementsPerPage, 0, length - arrayIndex);
 
                 if (pageIndex > pagesCount)
                 {
@@ -81,12 +88,10 @@ namespace CippSharpEditor.Core.Containers
                 r.height = EditorGUI.GetPropertyHeight(elementsPerPageProperty);
                 EditorGUI.PropertyField(r, elementsPerPageProperty);
                 r.y += r.height + EditorGUIUtils.VerticalSpacing * 2;
-                h += r.height + EditorGUIUtils.VerticalSpacing * 2;
 
                 //Draw feedback label 0
                 EditorGUI.LabelField(r, $"Total array length: {length.ToString()}");
                 r.y += EditorGUIUtils.LineHeight;
-                h += EditorGUIUtils.LineHeight;
 
                 //Draw int slider of page index
                 //clamp page index between 0 and actual length
@@ -101,19 +106,19 @@ namespace CippSharpEditor.Core.Containers
                     EditorUtility.SetDirty(property.serializedObject.targetObject);
                 }
                 r.y += EditorGUIUtils.LineHeight;
-                h += EditorGUIUtils.LineHeight;
+                
 
                 //Draw feedback label 1
                 GUI.enabled = false;
                 EditorGUI.LabelField(r, $"Displaying page: {pageIndex.ToString()}/{pagesCount.ToString()}.");
                 r.y += EditorGUIUtils.LineHeight;
-                h += EditorGUIUtils.LineHeight;
+               
 
                 //Draw inspected elements array
                 r.height = EditorGUIUtils.GetPropertyHeight(inspectedElementsProperty);
                 EditorGUI.PropertyField(r, inspectedElementsProperty, true);
                 r.y += r.height + EditorGUIUtils.VerticalSpacing;
-                h += r.height + EditorGUIUtils.VerticalSpacing;
+               
 
                 //Draw feedback label 2
                 EditorGUI.indentLevel++;
@@ -121,7 +126,7 @@ namespace CippSharpEditor.Core.Containers
                 EditorGUI.LabelField(r,
                     $"Displaying elements: {clampedElementsPerPage.ToString()}/{elementsPerPageProperty.intValue.ToString()}.");
                 r.y += EditorGUIUtils.LineHeight;
-                h += EditorGUIUtils.LineHeight;
+               
                 EditorGUI.indentLevel--;
 
                 GUI.enabled = true;

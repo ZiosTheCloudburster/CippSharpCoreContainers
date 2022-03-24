@@ -54,6 +54,18 @@ namespace CippSharp.Core.Containers
         [CustomPropertyDrawer(typeof(EncodedPagedBytesArray), true)]
         public class EncodedPagedBytesArrayDrawer : APagedArrayContainerDrawer
         {
+            public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
+            {
+                //Current Height
+                h = base.GetPropertyHeight(property, label);
+                if (property.isExpanded)
+                {
+                    SerializedProperty encodedProperty = property.FindPropertyRelative(nameof(encoded));
+                    h += EditorGUI.GetPropertyHeight(encodedProperty) + EditorGUIUtils.VerticalSpacing;
+                }
+                return h;
+            }
+
             /// <summary>
             /// Simply add the new property to draw
             /// </summary>
@@ -73,7 +85,6 @@ namespace CippSharp.Core.Containers
                     r.height = EditorGUI.GetPropertyHeight(encodedProperty);
                     EditorGUI.PropertyField(r, encodedProperty);
                     r.y += r.height + EditorGUIUtils.VerticalSpacing;
-                    h += r.height + EditorGUIUtils.VerticalSpacing;
                     GUI.enabled = true;
                     EditorGUI.indentLevel--;
                 }
