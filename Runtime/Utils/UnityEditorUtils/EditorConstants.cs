@@ -1,4 +1,4 @@
-﻿
+﻿#if UNITY_EDITOR
 namespace CippSharp.Core.Containers
 {
     internal static class EditorConstants
@@ -20,3 +20,4 @@ namespace CippSharp.Core.Containers
 
     }
 }
+#endif
