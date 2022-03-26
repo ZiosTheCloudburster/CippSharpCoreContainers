@@ -24,23 +24,6 @@ namespace CippSharp.Core.Containers
         /// </summary>
         public static readonly float LineHeight = SingleLineHeight + VerticalSpacing;
 
-        #region Draw Property
-        
-        /// <summary>
-        /// It draws the property only if it is different from null.
-        /// </summary>
-        /// <param name="rect"></param>
-        /// <param name="property"></param>
-        public static void DrawProperty(ref Rect rect, SerializedProperty property)
-        {
-            if (property != null)
-            {
-                EditorGUI.PropertyField(rect, property, property.isExpanded && property.hasChildren);
-            }
-        }
-        
-        #endregion
-        
         #region Draw Not Editable Property
         
         /// <summary>

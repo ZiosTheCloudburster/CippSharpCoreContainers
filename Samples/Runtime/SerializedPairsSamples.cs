@@ -5,11 +5,14 @@ namespace CippSharp.Core.Containers.Samples
 {
     internal class SerializedPairsSamples : MonoBehaviour
     {
+        /// <summary>
+        /// Tooltip
+        /// </summary>
         public string message = "See what happens during runtime.";
         
         [Space(5)]
-        [SerializeField] private RendererMaterialsPair savedRendererMaterials;
-        [SerializeField] private MeshRendererMeshFilterPair savedMeshRendererMeshFilterPair;
+        [SerializeField] private RendererMaterialsPair savedRendererMaterials = new RendererMaterialsPair(null, null);
+        [SerializeField] private MeshRendererMeshFilterPair savedMeshRendererMeshFilterPair = new MeshRendererMeshFilterPair(null, null);
 
         private void Start()
         {
