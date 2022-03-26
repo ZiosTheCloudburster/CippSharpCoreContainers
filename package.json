@@ -1,0 +1,17 @@
+{
+  "name": "com.cippsharpcore.containers",
+  "version": "1.0.0",
+  "displayName": "CippSharpCore.Containers",
+  "description": "Containers Utils",
+  "unity":"2019.4",
+  "unityRelease":"10f1",  
+  "keywords": [
+    "cippsharp",
+    "containers"
+  ],
+  "license": "APACHE 2.0",
+  "author" : {
+    "name" : "Alessandro Salani (Cippman)",    
+    "url" : "https://github.com/ZiosTheCloudburster/CippSharpCoreContainers.git"
+  }  
+}
