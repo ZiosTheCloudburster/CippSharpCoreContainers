@@ -10,6 +10,16 @@ namespace CippSharp.Core.Containers
         IDictionary<TKey, TValue> Dictionary { get; }
         
         /// <summary>
+        /// The Keys
+        /// </summary>
+        ICollection<TKey> Keys { get; }
+        
+        /// <summary>
+        /// The Values
+        /// </summary>
+        ICollection<TValue> Values { get; }
+
+        /// <summary>
         /// Access the dictionary
         /// </summary>
         /// <param name="key"></param>

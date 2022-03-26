@@ -172,6 +172,16 @@ namespace CippSharp.Core.Containers
         public virtual ICollection<KeyValuePair<TKey, TValue>> Collection => ToDictionary();
 
         public virtual IDictionary<TKey, TValue> Dictionary => ToDictionary();
+        
+        /// <summary>
+        /// Keys
+        /// </summary>
+        public virtual ICollection<TKey> Keys => value.Select(p => p.Key).ToArray();
+
+        /// <summary>
+        /// Values
+        /// </summary>
+        public virtual ICollection<TValue> Values => value.Select(p => p.Value).ToArray();
        
         /// <summary>
         /// Element at index

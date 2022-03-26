@@ -317,6 +317,7 @@ GameObject:
   m_Component:
   - component: {fileID: 238387137}
   - component: {fileID: 238387136}
+  - component: {fileID: 238387138}
   m_Layer: 0
   m_Name: SerializedPairsSamples
   m_TagString: Untagged
@@ -358,6 +359,52 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &238387138
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 238387135}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 134c148be62bc694ba3cf4ff4ff58f63, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  message: Populate this to debug, then use the ContextMenu to launch the debug
+  savedRendererMaterials:
+    key: {fileID: 1239213439}
+    value:
+    - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  reportData:
+    output: "[RendererMaterialsPair]:  container type CippSharp.Core.Containers.PairContainer`2[[UnityEngine.Renderer,
+      UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null],[UnityEngine.Material[],
+      UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]]\r\n
+      raw value: System.Object[]\r\n accessed data: System.Object[]\r\n checked data:
+      System.Object[]\r\n set data successful.\r\n[RendererMaterialsPair]:  container
+      type CippSharp.Core.Containers.PairContainer`2[[UnityEngine.Renderer, UnityEngine.CoreModule,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null],[UnityEngine.Material[],
+      UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]]\r\n
+      value: System.Object[]\r\n accessed data: System.Object[]\r\n checked data:
+      System.Object[]\r\n set data successful.\r\n[RendererMaterialsPair]:  container
+      type CippSharp.Core.Containers.PairContainer`2[[UnityEngine.Renderer, UnityEngine.CoreModule,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null],[UnityEngine.Material[],
+      UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]]\r\n
+      value: System.Object[]\r\n accessed data: System.Object[]\r\n checked data:
+      System.Object[]\r\n set data successful.\r\n[RendererMaterialsPair]:  container
+      type CippSharp.Core.Containers.PairContainer`2[[UnityEngine.Renderer, UnityEngine.CoreModule,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null],[UnityEngine.Material[],
+      UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]]\r\n
+      value: [Cube (UnityEngine.MeshRenderer), UnityEngine.Material[]]\r\n accessed
+      data: [Cube (UnityEngine.MeshRenderer), UnityEngine.Material[]]\r\n checked
+      data: [Cube (UnityEngine.MeshRenderer), UnityEngine.Material[]]\r\n set data
+      successful.\r\n[RendererMaterialsPair]:  container type CippSharp.Core.Containers.PairContainer`2[[UnityEngine.Renderer,
+      UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null],[UnityEngine.Material[],
+      UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]]\r\n
+      key: Cube (UnityEngine.MeshRenderer)\r\n value: UnityEngine.Material[]\r\n
+      accessed key: Cube (UnityEngine.MeshRenderer); accessed value: UnityEngine.Material[]\r\n
+      checked key: Cube (UnityEngine.MeshRenderer); checked value: UnityEngine.Material[]\r\n
+      set data successful."
 --- !u!1 &483690047
 GameObject:
   m_ObjectHideFlags: 0
@@ -889,6 +936,7 @@ GameObject:
   - component: {fileID: 1319584842}
   - component: {fileID: 1319584844}
   - component: {fileID: 1319584843}
+  - component: {fileID: 1319584845}
   m_Layer: 0
   m_Name: SerializedDictionariesType2Samples
   m_TagString: Untagged
@@ -974,6 +1022,36 @@ MonoBehaviour:
     - {fileID: 814827722}
     messages: 'WARNING: you keys are containing a duplicate. This is not allowed
       in dictionaries.'
+--- !u!114 &1319584845
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1319584840}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ad7289c9285ca0b4c85c30d5148f95ca, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  message: Populate this to debug, then use the ContextMenu to launch the debug
+  serializedDictionary:
+    keys:
+    - Zero
+    - Uno
+    values:
+    - {fileID: 132651551}
+    - {fileID: 814827722}
+    messages: 
+  reportData:
+    output: "[DictionaryStringGameObject]:  container type CippSharp.Core.Containers.SerializedDictionary`2[[System.String,
+      mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089],[UnityEngine.GameObject,
+      UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]]\r\n
+      collection: System.Collections.Generic.Dictionary`2[System.String,UnityEngine.GameObject]\r\n
+      count: 1\r\n elements: [element (0 [Zero, Cube (0) (UnityEngine.GameObject)]),
+      ]\r\n iteration successful.\r\n methods: [ToArray(), (count > 0 case), Clear(),
+      \r\n default methods failed. Exception: Index was out of range. Must be non-negative
+      and less than the size of the collection.\r\nParameter name: index"
 --- !u!1 &1475965191
 GameObject:
   m_ObjectHideFlags: 0

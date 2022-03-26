@@ -1,4 +1,5 @@
-﻿using System;
+﻿#if UNITY_EDITOR
+using System;
 using UnityEngine;
 
 namespace CippSharp.Core.Containers.Samples
@@ -7,8 +8,9 @@ namespace CippSharp.Core.Containers.Samples
     internal struct ReportData
     {
 #pragma warning disable 649
-        [TextArea(1, 10)] 
+        [TextArea(1, 100)] 
         public string output;
 #pragma warning restore 649
     }
 }
+#endif

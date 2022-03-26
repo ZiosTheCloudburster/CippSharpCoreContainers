@@ -11,7 +11,7 @@ namespace CippSharp.Core.Containers
     /// <typeparam name="TKey"></typeparam>
     /// <typeparam name="TValue"></typeparam>
     [Serializable]
-    public class PairContainer<TKey, TValue> : APairContainerBase, IContainer<object>, IContainer<object[]>, IContainerPair<TKey, TValue>, ISimplePair<TKey, TValue>
+    public class PairContainer<TKey, TValue> : APairContainerBase, IContainer<object>, IContainer<object[]>, IContainer<KeyValuePair<TKey, TValue>>, IContainerPair<TKey, TValue>, ISimplePair<TKey, TValue>
     {
         [FormerlySerializedAs("m_data")]
         [FormerlySerializedAs("data")]
@@ -112,6 +112,7 @@ namespace CippSharp.Core.Containers
             return value;
         }
 
+        //Get items
         object IContainer<object>.GetValue()
         {
             return Items;
@@ -125,6 +126,15 @@ namespace CippSharp.Core.Containers
         object[] IContainer<object[]>.GetValue()
         {
             return Items;
+        }
+        
+        /// <summary>
+        /// return key value pair
+        /// </summary>
+        /// <returns></returns>
+        KeyValuePair<TKey, TValue> IContainer<KeyValuePair<TKey, TValue>>.GetValue()
+        {
+            return this;
         }
         
         /// <summary>
@@ -167,6 +177,17 @@ namespace CippSharp.Core.Containers
         public virtual void Access(AccessDelegate<TKey, TValue> access)
         {
             access.Invoke(ref key, ref value);
+        }
+        
+        /// <summary>
+        /// Access key value pair
+        /// </summary>
+        /// <param name="access"></param>
+        public void Access(AccessDelegate<KeyValuePair<TKey, TValue>> access)
+        {
+            KeyValuePair<TKey, TValue> pair = this;
+            access.Invoke(ref pair);
+            Set(pair);
         }
         
         /// <summary>
@@ -213,7 +234,15 @@ namespace CippSharp.Core.Containers
         {
             return access.Invoke(ref key, ref value);
         }
-
+        
+        public bool Check(PredicateAccessDelegate<KeyValuePair<TKey, TValue>> access)
+        {
+            KeyValuePair<TKey, TValue> pair = this;
+            bool check = access.Invoke(ref pair);
+            Set(pair);
+            return check;
+        }
+       
         public override void Set(object newValue)
         {
             if (CastUtils.To(newValue, out object[] newItems))
@@ -243,6 +272,12 @@ namespace CippSharp.Core.Containers
             this.value = newValue;
         }
         
+        public void Set(KeyValuePair<TKey, TValue> newValue)
+        {
+            key = newValue.Key;
+            value = newValue.Value;
+        }
+        
         #endregion
         
         public virtual KeyValuePair<TKey, TValue> ToKeyValuePair()
@@ -263,5 +298,7 @@ namespace CippSharp.Core.Containers
         }
         
         #endregion
+
+       
     }
 }

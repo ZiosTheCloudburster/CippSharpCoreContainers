@@ -290,7 +290,20 @@ namespace CippSharp.Core.Containers
         /// </summary>
         public virtual ICollection<KeyValuePair<TKey, TValue>> Collection => ToDictionary();
 
+        /// <summary>
+        /// Dictionary Readonly
+        /// </summary>
         public virtual IDictionary<TKey, TValue> Dictionary => ToDictionary();
+
+        /// <summary>
+        /// Keys
+        /// </summary>
+        public virtual ICollection<TKey> Keys => keys;
+
+        /// <summary>
+        /// Values
+        /// </summary>
+        public virtual ICollection<TValue> Values => values;
        
         /// <summary>
         /// Element at index
