@@ -43,7 +43,7 @@ namespace CippSharp.Core.Containers.Samples
                     {
                         EditorGUI.indentLevel++;
                         
-                        r = EditorGUI.IndentedRect(r);
+//                        r = EditorGUI.IndentedRect(r);
 
                         var bkgColorGUI = GUI.backgroundColor;
                         GUI.backgroundColor = Color.red;
@@ -84,8 +84,20 @@ namespace CippSharp.Core.Containers.Samples
 
         [Header("Settings:")]
         //[CustomAttributeDrawer]
-        public CustomData data0 = new CustomData();
+        [TextArea(1, 5)]
+        public string tooltip0 = "On data 0 is applied a custom drawer attribute, so it ovverrides the custom property drawer for it." +
+            $"{Environment.NewLine}On data 1 data is without attribute, so it's the property drawer!";
+        [NotEditable]
+        public CustomData data0 = new CustomData(); 
+        public CustomData data1 = new CustomData();
+
+        [Space(6)] 
+        [TextArea(1, 5)] public string tooltip1 = "With containers both the drawer from the attribute and custom property are displayed.";
+        
+        [NotEditable]
         public CustomDataContainer dataContainer0 = new CustomDataContainer();
+        public CustomDataContainer dataContainer1 = new CustomDataContainer();
+        [Space(6)]
         public CustomDataListContainer dataListContainer0 = new CustomDataListContainer();
         public SpecificCustomDataListContainer specificDataListContainer0 = new SpecificCustomDataListContainer();
     }
