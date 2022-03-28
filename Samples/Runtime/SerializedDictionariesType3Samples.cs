@@ -1,6 +1,7 @@
 ﻿#if UNITY_EDITOR
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace CippSharp.Core.Containers.Samples
@@ -16,21 +17,7 @@ namespace CippSharp.Core.Containers.Samples
         [Serializable]
         internal class DictionaryStringGameObject : SerializedDictionary<StringGameObjectPair, string, GameObject>
         {
-            public override void Clear()
-            {
-                Debug.Log("Before Clear "+Count);
-                
-                base.Clear();
-                
-                Debug.Log("After Clear "+Count);
-            }
-
-            public override void AddRange(IEnumerable<KeyValuePair<string, GameObject>> enumerable)
-            {
-                base.AddRange(enumerable);
-                
-                Debug.Log("After Add Range "+Count);
-            }
+            
         }
 
         /// <summary>

@@ -156,14 +156,22 @@ namespace CippSharp.Core.Containers
         {
             switch (newValue)
             {
-                case Dictionary<TKey, TValue> dictionary:
-                    ReadDictionary(dictionary);
+                case Dictionary<TKey, TValue> newDictionary:
+                    ReadDictionary(newDictionary);
+                    break;
+                case List<T> newList:
+                    Set(newList);
                     break;
             }
         }
 
         public virtual void Set(List<T> newValue)
         {
+            if (Equals(value, newValue))
+            {
+               newValue = new List<T>(newValue);
+            }
+            
             Clear();
             AddRange(newValue);
         } 
@@ -330,12 +338,12 @@ namespace CippSharp.Core.Containers
         /// WARNING: you cannot add multiple elements with same key
         /// </summary>
         /// <param name="enumerable"></param>
-        public void AddRange(IEnumerable<T> enumerable)
+        public virtual void AddRange(IEnumerable<T> enumerable)
         {
             T[] array = enumerable.ToArray();
-            foreach (var t in array)
+            foreach (var element in array)
             {
-                TryAdd(t);
+                TryAdd(element);
             }
         }
         
@@ -371,13 +379,38 @@ namespace CippSharp.Core.Containers
                 instance.SetKey(tmpKey);
                 instance.SetValue(element.Value);
                 this.value.Add(instance);
+                return true;
             }
             catch (Exception e)
             {
                 Debug.LogError($"{TActivatorFailedMessage}. Exception {e.Message}.");
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// Tries to add an element to dictionary
+        /// </summary>
+        /// <param name="element"></param>
+        /// <returns>success</returns>
+        private bool TryAdd(T element)
+        {
+            TKey tmpKey = element.Key;
+            if (Contains(value, tmpKey))
+            {
+                return false;
             }
             
-            return true;
+            try
+            {
+                this.value.Add(element);
+                return true;
+            }
+            catch (Exception e)
+            {
+                Debug.LogError($"{TActivatorFailedMessage}. Exception {e.Message}.");
+                return false;
+            }
         }
         
 
@@ -510,17 +543,6 @@ namespace CippSharp.Core.Containers
         }
 
         #endregion
-
-        
-        #region Operators
-
-//        public static implicit operator ListContainer<T>(SerializedDictionary<T, Key, Value> serializedDictionary)
-//        {
-//            return serializedDictionary.list;
-//        }
-
-        #endregion
-
 
         /// <summary>
         /// Contains the key element?

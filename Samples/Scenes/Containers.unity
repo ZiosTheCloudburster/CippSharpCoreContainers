@@ -385,12 +385,12 @@ MonoBehaviour:
       type CippSharp.Core.Containers.PairContainer`2[[UnityEngine.Renderer, UnityEngine.CoreModule,
       Version=0.0.0.0, Culture=neutral, PublicKeyToken=null],[UnityEngine.Material[],
       UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]]\r\nvalue:
-      System.Object[]\r\n accessed data: System.Object[]\r\n checked data: System.Object[]\r\n
-      set data successful.\r\n[RendererMaterialsPair]:  container type CippSharp.Core.Containers.PairContainer`2[[UnityEngine.Renderer,
+      System.Object[]\r\n accessed data: System.Object[]\r\n checked data: System.Object[]\r\nset
+      data successful.\r\n[RendererMaterialsPair]:  container type CippSharp.Core.Containers.PairContainer`2[[UnityEngine.Renderer,
       UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null],[UnityEngine.Material[],
       UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]]\r\nvalue:
-      System.Object[]\r\n accessed data: System.Object[]\r\n checked data: System.Object[]\r\n
-      set data successful.\r\n[RendererMaterialsPair]:  container type CippSharp.Core.Containers.PairContainer`2[[UnityEngine.Renderer,
+      System.Object[]\r\n accessed data: System.Object[]\r\n checked data: System.Object[]\r\nset
+      data successful.\r\n[RendererMaterialsPair]:  container type CippSharp.Core.Containers.PairContainer`2[[UnityEngine.Renderer,
       UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null],[UnityEngine.Material[],
       UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]]\r\nvalue:
       [Cube (UnityEngine.MeshRenderer), UnityEngine.Material[]]\r\n accessed data:
@@ -1051,10 +1051,10 @@ MonoBehaviour:
       mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089],[UnityEngine.GameObject,
       UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]]\r\ncollection:
       System.Collections.Generic.Dictionary`2[System.String,UnityEngine.GameObject]\r\ncount:
-      1\r\n elements: [element (0 [Zero, Cube (0) (UnityEngine.GameObject)]), ]\r\n
-      iteration successful.\r\n methods: [ToArray(), (count > 0 case), Clear(), \r\n
-      default methods failed. Exception: Index was out of range. Must be non-negative
-      and less than the size of the collection.\r\nParameter name: index"
+      1\r\n elements: [element (0 [Zero, Cube (0) (UnityEngine.GameObject)]), ]\r\niteration
+      successful.\r\n methods: [ToArray(), (count > 0 case), Clear(), \r\ndefault
+      methods failed. Exception: Index was out of range. Must be non-negative and
+      less than the size of the collection.\r\nParameter name: index"
 --- !u!1 &1475965191
 GameObject:
   m_ObjectHideFlags: 0
@@ -1423,9 +1423,17 @@ MonoBehaviour:
       value: {fileID: 1010737353}
     messages: 
   reportData:
-    output: "[DictionaryStringGameObject]:  container type System.Collections.Generic.List`1[[CippSharp.Core.Containers.Samples.SerializedDictionariesType3Samples+StringGameObjectPair,
-      com.CippSharpCore.Containers.Samples, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]]\r\n
-      value: System.Collections.Generic.List`1[CippSharp.Core.Containers.Samples.SerializedDictionariesType3Samples+StringGameObjectPair]\r\n
-      accessed data: System.Collections.Generic.Dictionary`2[System.String,UnityEngine.GameObject]\r\n
-      checked data: System.Collections.Generic.Dictionary`2[System.String,UnityEngine.GameObject]\r\n
-      set data successful."
+    output: '[DictionaryStringGameObject]:  container type System.Collections.Generic.List`1[[CippSharp.Core.Containers.Samples.SerializedDictionariesType3Samples+StringGameObjectPair,
+      com.CippSharpCore.Containers.Samples, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]]
+
+      value:
+      System.Collections.Generic.List`1[CippSharp.Core.Containers.Samples.SerializedDictionariesType3Samples+StringGameObjectPair]
+
+      accessed
+      data: System.Collections.Generic.Dictionary`2[System.String,UnityEngine.GameObject]
+
+      checked
+      data: System.Collections.Generic.Dictionary`2[System.String,UnityEngine.GameObject]
+
+      set
+      data successful.'

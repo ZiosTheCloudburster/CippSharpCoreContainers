@@ -47,8 +47,7 @@ namespace CippSharp.Core.Containers.Samples
 
             if (debugContainer)
             {
-//                DebugContainerUtils.DebugContainer((IContainer<object>) serializedDictionary, ref reportData.output);
-                DebugContainerUtils.DebugContainer((IContainer<List<StringGameObjectPair>>) serializedDictionary, ref reportData.output);
+                DebugContainerUtils.DebugContainer((IContainer<object>) serializedDictionary, ref reportData.output);
             }
 
             if (debugCollectionContainer)
