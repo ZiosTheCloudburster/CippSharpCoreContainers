@@ -74,7 +74,7 @@ namespace CippSharp.Core.Containers
             AddRange(range);
         }
         
-         #region IContainerBase and IContainer Implementation
+        #region IContainerBase and IContainer Implementation
         
         /// <summary>
         /// The type of the stored value
@@ -162,6 +162,12 @@ namespace CippSharp.Core.Containers
             }
         }
 
+        public virtual void Set(List<T> newValue)
+        {
+            Clear();
+            AddRange(newValue);
+        } 
+        
         #endregion
         
         #region ICollectionContainer and IDictionaryContainer Implementation
@@ -217,7 +223,10 @@ namespace CippSharp.Core.Containers
                 {
                     try
                     {
-                        this.value.Add((T)new KeyValuePair<TKey, TValue>(key, value));
+                        T instance = Activator.CreateInstance<T>();
+                        instance.SetKey(key);
+                        instance.SetValue(value);
+                        this.value.Add(instance);
                     }
                     catch (Exception e)
                     {
@@ -291,11 +300,7 @@ namespace CippSharp.Core.Containers
             ReadCollection(newValue);
         }
         
-        public virtual void Set(List<T> newValue)
-        {
-            Clear();
-            AddRange(newValue);
-        }
+      
         
         /// <summary>
         /// WARNING: you cannot add an element with same key.
@@ -362,7 +367,10 @@ namespace CippSharp.Core.Containers
 
             try
             {
-                this.value.Add((T)new KeyValuePair<TKey, TValue>(tmpKey, element.Value));
+                T instance = Activator.CreateInstance<T>();
+                instance.SetKey(tmpKey);
+                instance.SetValue(element.Value);
+                this.value.Add(instance);
             }
             catch (Exception e)
             {
@@ -522,7 +530,8 @@ namespace CippSharp.Core.Containers
         /// <returns></returns>
         protected static bool Contains(List<T> list, TKey element)
         {
-            return IndexOf(list, element) >= 0;
+            int index = IndexOf(list, element);
+            return ArrayUtils.IsValidIndex(index, list);
         }
         
         /// <summary>
@@ -533,10 +542,15 @@ namespace CippSharp.Core.Containers
         /// <returns></returns>
         protected static int IndexOf(List<T> list, TKey element)
         {
+            if (ArrayUtils.IsNullOrEmpty(list))
+            {
+                return -1;
+            }
+            
             for (int i = 0; i < list.Count; i++)
             {
                 T pair = list[i];
-                if ((object)pair.Key == (object)element)
+                if (Equals(pair.Key, element))
                 {
                     return i;
                 }

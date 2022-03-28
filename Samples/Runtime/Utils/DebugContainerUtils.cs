@@ -174,7 +174,8 @@ namespace CippSharp.Core.Containers.Samples
             try
             {
                 //self set of container
-                container.Set(container.GetValue());
+                T tmpValue = container.GetValue();
+                container.Set(tmpValue);
                 output += $"{NewLine} set data successful.";
             }
             catch (Exception e)

@@ -5,13 +5,13 @@ using UnityEngine;
 
 namespace CippSharp.Core.Containers.Samples
 {
-    using DictionaryStringGameObject = SerializedDictionariesType2Samples.DictionaryStringGameObject;
+    using StringGameObjectPair = SerializedDictionariesType3Samples.StringGameObjectPair;
+    using DictionaryStringGameObject = SerializedDictionariesType3Samples.DictionaryStringGameObject;
     
-    internal class DebugSerializedDictionaryType2 : MonoBehaviour
-    {
+    internal class DebugSerializedDictionaryType3 : MonoBehaviour
+    { 
         public bool debugContainerBase = false;
         public bool debugContainer = false;
-        public bool debugContainerPair = false;
         public bool debugCollectionContainer = false;
         public bool debugDictionaryContainer = false;
         
@@ -24,15 +24,14 @@ namespace CippSharp.Core.Containers.Samples
         /// <summary>
         /// Populate this from inspector, then cache it during runtime
         /// </summary>
-        [SerializeField] 
-        private DictionaryStringGameObject serializedDictionary = new DictionaryStringGameObject();
-        
+        [SerializeField] private DictionaryStringGameObject serializedDictionary = new DictionaryStringGameObject();
+
         /// <summary>
         /// Debug report
         /// </summary>
         [Header("Infos:")]
-        [SerializeField, NotEditable] private ReportData reportData = new ReportData();
-        
+        [SerializeField] private ReportData reportData = new ReportData();
+
         /// <summary>
         /// Run Debug
         /// </summary>
@@ -48,15 +47,10 @@ namespace CippSharp.Core.Containers.Samples
 
             if (debugContainer)
             {
-                DebugContainerUtils.DebugContainer((IContainer<object>) serializedDictionary, ref reportData.output);
-                DebugContainerUtils.DebugContainer((IContainer<object[]>)serializedDictionary, ref reportData.output);
-//            DebugContainerUtils.DebugContainer((IContainer<KeyValuePair<Renderer, Material[]>>)serializedDictionary, ref reportData.output);
+//                DebugContainerUtils.DebugContainer((IContainer<object>) serializedDictionary, ref reportData.output);
+                DebugContainerUtils.DebugContainer((IContainer<List<StringGameObjectPair>>) serializedDictionary, ref reportData.output);
             }
 
-            if (debugContainerPair)
-            {
-                DebugContainerUtils.DebugContainer((IContainerPair<List<string>, List<GameObject>>)serializedDictionary, ref reportData.output);
-            }
             if (debugCollectionContainer)
             {
                 DebugContainerUtils.DebugContainer((ICollectionContainer<ICollection<KeyValuePair<string, GameObject>>, KeyValuePair<string, GameObject>>)serializedDictionary, ref reportData.output);
