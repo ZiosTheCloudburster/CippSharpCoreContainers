@@ -1,5 +1,5 @@
 ### CippSharpCoreContainers
-Containers are intended to be a serializable classes that holds a reference to 'data' / 'something'. 
+Containers are intended to be serializable classes that holds a reference to 'data' / 'something'. 
 As abstract concept.
 
 ### Purpose:
