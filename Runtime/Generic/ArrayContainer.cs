@@ -9,16 +9,6 @@ namespace CippSharp.Core.Containers
    [Serializable]
    public class ArrayContainer<T> : AArrayContainer<T>
    {
-//      [SerializeField] public T[] array = new T[0];
-//
-//      public T this[int index]
-//      {
-//         get { return array[index]; }
-//         set { array[index] = value; }
-//      }
-//      
-//      public override Type ContainerType => typeof(T[]);
-      
       public ArrayContainer()
       {
          this.value = new T[0];
@@ -33,11 +23,6 @@ namespace CippSharp.Core.Containers
       {
          this.value = array;
       }
-
-//      public T[] GetElements()
-//      {
-//         return array.ToArray();
-//      }
 
       public int Length => Count;
 
@@ -54,10 +39,5 @@ namespace CippSharp.Core.Containers
       }
       
       #endregion
-      
-//      IEnumerator IEnumerable.GetEnumerator()
-//      {
-//         return array.GetEnumerator();
-//      }
    }
 }

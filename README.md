@@ -49,4 +49,4 @@ the same datas shared as class reference between MonoBehaviours. To have differe
 - [repo](https://github.com/ZiosTheCloudburster/CippSharpCoreContainers.git)
 
 ### Support:
-- [patreon](https://www.patreon.com/AlessandroSalani)
+- [tip jar](https://www.amazon.it/photos/share/Gbg3FN0k6pjG6F5Ln3dqQEmwO0u4nSkNIButm3EGtit)
