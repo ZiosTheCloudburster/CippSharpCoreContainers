@@ -43,7 +43,7 @@ the same datas shared as class reference between MonoBehaviours. To have differe
 * Not only this. I also applied the concept of containers to draw:
     * SerializedDictionaries to draw dictionaries in inspector (that can be cached in your class during runtime).
     * PagedArrayContainers to draw ReadOnly big amount of data without affecting editor performance. 
-    Just imagine to have an array of 500.000 length... _eh_... normally the inspector would beg for mercy. 
+    Just imagine to have an array of 500.000 length... _eh!_... normally the inspector would beg for mercy, but not this time. 
 
 ### Links:
 - [repo](https://github.com/ZiosTheCloudburster/CippSharpCoreContainers.git)
