@@ -21,6 +21,7 @@ namespace CippSharp.Core.Containers
         [FormerlySerializedAs("array")]
         [FormerlySerializedAs("corners")]
         [FormerlySerializedAs("value")]
+        [FormerlySerializedAs("m_name")]
         [SerializeField] protected T value = default(T);
         public virtual T Value => value;
         

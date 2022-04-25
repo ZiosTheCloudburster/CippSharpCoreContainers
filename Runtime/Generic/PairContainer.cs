@@ -20,8 +20,12 @@ namespace CippSharp.Core.Containers
         [FormerlySerializedAs("array")]
         [FormerlySerializedAs("corners")]
         [FormerlySerializedAs("value")]
+        [FormerlySerializedAs("m_name")]
+        [FormerlySerializedAs("name")]
         [SerializeField] protected TKey key;
         public TKey Key => key;
+        [FormerlySerializedAs("m_value")]
+        [FormerlySerializedAs("color")]
         [SerializeField] protected TValue value;
         public TValue Value => value;
 
