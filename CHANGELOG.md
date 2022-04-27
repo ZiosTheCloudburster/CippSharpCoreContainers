@@ -1,6 +1,13 @@
-## Version 1.0.X
-- minor changes and bug fixing
-- adding debugs for scripts
+## Version Z.Y.X
+- Z (better not do this yet)
+- Y major changes or additions and bug fixes
+- X minor changes and / or bug fixes
+
+## Version 1.1.0
+- added AHiddenDataAsset and AHiddenDataList for 
+serialization of hidden data or huge data (to not display them in inspector)
+but handle them from code.
+-
 
 ## Version 1.0.1
 - added stringstring and stringcolor pairs
