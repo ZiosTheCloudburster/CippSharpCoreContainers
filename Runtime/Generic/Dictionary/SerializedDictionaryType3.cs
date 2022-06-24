@@ -64,14 +64,15 @@ namespace CippSharp.Core.Containers
 
         public SerializedDictionary(IEnumerable<T> range)
         {
-            if (ArrayUtils.HasDuplicates(range.Select(t => t.Key)))
+            ICollection<T> collection = range is ICollection<T> c ? c : range.ToArray();
+            if (ArrayUtils.HasDuplicates(collection.Select(t => t.Key)))
             {
                 //NotSupported for dictionaries
                 throw new Exception(DictionariesDuplicatesError);
             }
             
             Clear();
-            AddRange(range);
+            AddRange(collection);
         }
         
         #region IContainerBase and IContainer Implementation
