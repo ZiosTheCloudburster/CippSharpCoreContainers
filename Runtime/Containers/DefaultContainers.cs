@@ -21,6 +21,22 @@ namespace CippSharp.Core.Containers
 
     #endregion
 
+    #region float
+
+    [Serializable]
+    public class FloatArrayContainer : ArrayContainer<float>
+    {
+        
+    }
+
+    [Serializable]
+    public class FloatListContainer : ListContainer<float>
+    {
+        
+    }
+
+    #endregion
+    
     #region int
 
     [Serializable]
