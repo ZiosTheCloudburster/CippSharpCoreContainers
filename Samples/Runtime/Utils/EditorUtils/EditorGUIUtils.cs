@@ -2,6 +2,7 @@
 // Author: Alessandro Salani (Cippo)
 //
 #if UNITY_EDITOR
+using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
@@ -114,6 +115,7 @@ namespace CippSharp.Core.Containers
             property.isExpanded = EditorGUI.Foldout(position, property.isExpanded, property.displayName);
             position.y += LineHeight;
         }
+        
     }
 }
 #endif

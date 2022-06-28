@@ -106,6 +106,22 @@ namespace CippSharp.Core.Containers
 		
 		#endregion
 		
+		/// <summary>
+		/// Draw a label with the passed text
+		/// </summary>
+		/// <param name="text"></param>
+		/// <param name="space"></param>
+		public static void DrawHeader(string text, int space = 3)
+		{
+			if (string.IsNullOrEmpty(text))
+			{
+				return;
+			}
+			
+			GUILayout.Space(space);
+			EditorGUILayout.LabelField(new GUIContent(text), EditorStyles.boldLabel);
+		}
+		
 		#region Draw Button
 
 	    /// <summary>
@@ -121,7 +137,7 @@ namespace CippSharp.Core.Containers
 		    }
 	    }
 
-	    #endregion
+		#endregion
 
 	    #region Draw Serialized Object Infos
 		

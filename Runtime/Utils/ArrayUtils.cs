@@ -8,6 +8,7 @@ namespace CippSharp.Core.Containers
     
     internal static class ArrayUtils
     {
+        
         #region Conversions
 
         /// <summary>
@@ -136,7 +137,56 @@ namespace CippSharp.Core.Containers
         
         #endregion
         
-        #region Find
+        
+        #region → Add
+
+        /// <summary>
+        /// Add an element to a list only if it is new
+        /// </summary>
+        /// <param name="list"></param>
+        /// <param name="element"></param>
+        /// <typeparam name="T"></typeparam>
+        public static void AddIfNew<T>(List<T> list, T element)
+        {
+            if (!list.Contains(element))
+            {
+                list.Add(element);
+            }
+        }
+
+        #endregion
+        
+        #region → Any, Contains or Find Element
+        
+        /// <summary>
+        /// Similar to Any of <see> <cref>System.linq</cref> </see>
+        /// it retrieve a valid index of the first element matching the predicate.
+        /// </summary>
+        /// <param name="list"></param>
+        /// <param name="predicate"></param>
+        /// <param name="index"></param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public static bool Any<T>(List<T> list, Predicate<T> predicate, out int index)
+        {
+            index = IndexOf(list, predicate);
+            return index > -1;
+        }
+        
+        /// <summary>
+        /// Similar to Any of <see> <cref>System.linq</cref> </see>
+        /// it retrieve a valid index of the first element matching the predicate.
+        /// </summary>
+        /// <param name="array"></param>
+        /// <param name="predicate"></param>
+        /// <param name="index"></param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public static bool Any<T>(T[] array, Predicate<T> predicate, out int index)
+        {
+            index = IndexOf(array, predicate);
+            return index > -1;
+        }
         
         /// <summary>
         /// Find Method
@@ -195,6 +245,48 @@ namespace CippSharp.Core.Containers
             return Array.IndexOf(array, element);
         }
 
+        /// <summary>
+        /// Retrieve index if array contains an element with given predicate.
+        /// Otherwise -1
+        /// </summary>
+        /// <param name="array"></param>
+        /// <param name="predicate"></param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns>-1 if it fails</returns>
+        public static int IndexOf<T>(T[] array, Predicate<T> predicate)
+        {
+            for (int i = 0; i < array.Length; i++)
+            {
+                if (predicate.Invoke(array[i]))
+                {
+                    return i;
+                }
+            }
+
+            return -1;
+        }
+        
+        /// <summary>
+        /// Retrieve index if list contains an element with given predicate.
+        /// Otherwise -1
+        /// </summary>
+        /// <param name="list"></param>
+        /// <param name="predicate"></param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns>-1 if it fails</returns>
+        public static int IndexOf<T>(List<T> list, Predicate<T> predicate)
+        {
+            for (int i = 0; i < list.Count; i++)
+            {
+                if (predicate.Invoke(list[i]))
+                {
+                    return i;
+                }
+            }
+
+            return -1;
+        }
+        
         #endregion
         
         

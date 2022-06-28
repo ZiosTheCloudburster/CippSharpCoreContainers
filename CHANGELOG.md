@@ -3,6 +3,9 @@
 - Y major changes or additions and bug fixes
 - X minor changes and / or bug fixes
 
+## Version 1.4.0
+- added TemplatesHolderAsset and his dependencies
+
 ## Version 1.3.0
 - added some pairs and lists
 - added ContainersLootTable static class
